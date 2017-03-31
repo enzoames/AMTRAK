@@ -24,12 +24,15 @@ class Station(models.Model):
         return self.station_name  # station_name becomes the reference
 
 
-
 # TRAINS
 #
 #   train_num     | starts_station | train_ends | train_direction | train_days |
 # ----------------|----------------|------------|-----------------|------------|
 #   int auto pk   |  station_id    | station_id |     bool(S/N)   | what days this train runs |
+
+#class Trains(models.Model):
+
+
 
 
 # PASSENGERS

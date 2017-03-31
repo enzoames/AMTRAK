@@ -2,10 +2,10 @@
 WSGI config for amtrak project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/
 """
+
+# DO NOT TOUCH THIS FILE AT ALL. NOTHING TO DO HERE !
+
 
 import os
 

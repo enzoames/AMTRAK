@@ -13,8 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+
+# DO NOT TOUCH THIS FILE AT ALL. NOTHING TO DO HERE !
+
 from django.conf.urls import url, include
 from django.contrib import admin
+
+
+# These are all the URLS we will need for our site
 
 urlpatterns = [
     url(r'^', include('amtrakmain.urls')),

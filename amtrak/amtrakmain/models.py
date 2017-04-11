@@ -8,7 +8,12 @@ from datetime import datetime
 # In models.py each class is a table in the database and each variable is a column
 
 
-# STATIONS
+                                    # ====================================
+                                    # ============ ENTITIES ==============
+                                    # ====================================
+
+
+# ==== STATION ====
 #
 #   Station_id    | station_name | station_symbol |
 # ----------------|--------------|----------------|
@@ -24,23 +29,35 @@ class Station(models.Model):
         return self.station_name  # station_name becomes the reference
 
 
-# TRAINS
+# ==== TRAIN ====
 #
-#   train_num     | starts_station | train_ends | train_direction | train_days |
-# ----------------|----------------|------------|-----------------|------------|
-#   int auto pk   |  station_id    | station_id |     bool(S/N)   | what days this train runs |
+#   train_num     | start_station | train_ends | train_direction | train_days |
+# ----------------|---------------|------------|-----------------|------------|
+#   int auto pk   |  station_id   | station_id |     bool(S/N)   | what days this train runs |
 
-#class Trains(models.Model):
+class Train(models.Model):
+    start_station = models.ForeignKey(Station, verbose_name='Train starts at Station')
+    end_station = models.ForeignKey(Station, verbose_name='Train ends at Station')
+    train_direction = models.BooleanField(help_text='North = 1, South = 0')
+    train_days = models.CharField(max_length=13, verbose_name='Days train runs', help_text='M-T-W-Th-F-S-Su')
 
+    def __unicode__(self):
+        return self.start_station
 
-
-
-# PASSENGERS
+# ==== PASSENGERS =====
 #
 #   passenger_id  | p_f_name | p_l_name | p_billing_address |   email    | points   |
 # ----------------|----------|----------|-------------------|------------|----------|
 #   int auto pk   |  VARCHAR | VARCHAR  |  emailField       | emailField |   ?      |
 
+class Passenger(models.Model):
+    p_f_name = models.CharField(max_length=15, verbose_name='First Name')
+    p_l_name = models.CharField(max_length=15, verbose_name='Last Name')
+    billing_address = models.CharField(max_length=50, verbose_name='Billing Address')
+    email = models.EmailField(default=0)
+
+    def __unicode__(self):
+        return self.p_f_name
 
 # SEATS_FREE
 #
@@ -48,8 +65,15 @@ class Station(models.Model):
 # ----------------|---------------|------------|-------------------|
 #   int auto pk   | segment_id pk |  dateField |    train_id pk    |
 
+class SeatsFree(models.Model):
+    sf_segment = models.ForeignKey()
+    sf_train = models.ForeignKey()
+    sf_date = models.DateField(verbose_name='Date')
 
-# PAYMENT_METHOD
+    def __unicode__(self):
+        return  self.sf_date
+
+# PAYMENT_METHOD    
 #   - cash or credit
 
 
@@ -64,14 +88,13 @@ class Station(models.Model):
 # dateField      | dateField/NULL |  segment_id FK  | segment_id FK |
 
 
-
-# SEGMENTS/SECTIONS
+# FARE
 #
-#   segment_id    | north_end     | south_end      | fares    | distance |
-# ----------------|---------------|----------------|----------|
-#   int auto pk   | station_id fk | station_id fk  | intField |
+# get a reasonable fair between boston and washington and spread out the fares btw the segments
 
-
+                                    # ====================================
+                                    # ============ REALTIONS =============
+                                    # ====================================
 
 # STOPS_AT
 #
@@ -81,8 +104,14 @@ class Station(models.Model):
 
 
 
-# FARE
+# SEGMENTS/SECTIONS
 #
-# get a reasonable fair between boston and washington and spread out the fares btw the segments
+#   segment_id    | north_end     | south_end      | fares    | distance |
+# ----------------|---------------|----------------|----------|
+#   int auto pk   | station_id fk | station_id fk  | intField |
+
+
+
+
 
 

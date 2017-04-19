@@ -59,26 +59,36 @@ class Passenger(models.Model):
     def __unicode__(self):
         return self.p_f_name
 
-# SEATS_FREE
+# ==== SEATS_FREE ====
 #
 #  seats_free_id  | sf_segment    | sf_date    |   sf_train_num    |
 # ----------------|---------------|------------|-------------------|
 #   int auto pk   | segment_id pk |  dateField |    train_id pk    |
 
 class SeatsFree(models.Model):
-    sf_segment = models.ForeignKey()
-    sf_train = models.ForeignKey()
+    sf_segment = models.ForeignKey(Segment, primary_key=True)
+    sf_train = models.ForeignKey(Train, primary_key=True)
     sf_date = models.DateField(verbose_name='Date')
 
     def __unicode__(self):
-        return  self.sf_date
-
-# PAYMENT_METHOD    
-#   - cash or credit
+        return self.sf_date
 
 
-# TRIPS
+# ==== PAYMENT_METHOD ====
+#
+#   payment_id   | type      |
+# ---------------|-----------|
+#   int fk p_id  | VARCHAR   |
 
+class PaymentMethod(models.Model):
+    type = models.CharField(max_length=10, verbose_name='Type of payment')
+
+    def __unicode__(self):
+        return self.type
+
+
+# ==== TRIPS ====
+#
 #   trip_id    | trip_start  | trip_end   | trip_train | fare | payment_method |
 # -------------|-------------|------------|------------|------|----------------|
 #  int auto pk | station_id  | station_id | train_id pk| int  | visa/master/   |
@@ -87,13 +97,21 @@ class SeatsFree(models.Model):
 # ---------------|----------------|-----------------|---------------|
 # dateField      | dateField/NULL |  segment_id FK  | segment_id FK |
 
+class TicketTrips(models.Model):
+    trip_start = models.ForeignKey(Station, verbose_name='Trip Start Station') # unique true ?
+    trip_end = models.ForeignKey(Station, verbose_name='Trip End Station') # unique true ?
+    trip_train = models.ForeignKey(Train, verbose_name='Train')
+    fare = models.ForeignKey(Fare, verbose_name='Fare')
+    trip_payment_method = models.ForeignKey(PaymentMethod, verbose_name='Choose Payment')
+    trip_date = models.ForeignKey() 
+
 
 # FARE
 #
 # get a reasonable fair between boston and washington and spread out the fares btw the segments
 
                                     # ====================================
-                                    # ============ REALTIONS =============
+                                    # ============ RELATIONS =============
                                     # ====================================
 
 # STOPS_AT

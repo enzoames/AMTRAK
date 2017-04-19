@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-from datetime import datetime
+from datetime import date
 
 # Create your models here
 # MOST OF THE WORK WILL BE DONE HERE. Please read comments
@@ -8,9 +8,6 @@ from datetime import datetime
 # In models.py each class is a table in the database and each variable is a column
 
 
-                                    # ====================================
-                                    # ============ ENTITIES ==============
-                                    # ====================================
 
 
 # ==== STATION ====
@@ -29,6 +26,7 @@ class Station(models.Model):
         return self.station_name  # station_name becomes the reference
 
 
+
 # ==== TRAIN ====
 #
 #   train_num     | start_station | train_ends | train_direction | train_days |
@@ -36,13 +34,16 @@ class Station(models.Model):
 #   int auto pk   |  station_id   | station_id |     bool(S/N)   | what days this train runs |
 
 class Train(models.Model):
-    start_station = models.ForeignKey(Station, verbose_name='Train starts at Station')
-    end_station = models.ForeignKey(Station, verbose_name='Train ends at Station')
+    # 1-1 Field already unique by default
+    start_station = models.OneToOneField(Station, related_name='s_start' ,verbose_name='Start Station')
+    end_station = models.OneToOneField(Station, related_name='s_end', verbose_name='End Station')
     train_direction = models.BooleanField(help_text='North = 1, South = 0')
     train_days = models.CharField(max_length=13, verbose_name='Days train runs', help_text='M-T-W-Th-F-S-Su')
 
     def __unicode__(self):
         return self.start_station
+
+
 
 # ==== PASSENGERS =====
 #
@@ -59,19 +60,43 @@ class Passenger(models.Model):
     def __unicode__(self):
         return self.p_f_name
 
-# ==== SEATS_FREE ====
-#
-#  seats_free_id  | sf_segment    | sf_date    |   sf_train_num    |
-# ----------------|---------------|------------|-------------------|
-#   int auto pk   | segment_id pk |  dateField |    train_id pk    |
 
-class SeatsFree(models.Model):
-    sf_segment = models.ForeignKey(Segment, primary_key=True)
-    sf_train = models.ForeignKey(Train, primary_key=True)
-    sf_date = models.DateField(verbose_name='Date')
+
+# ==== SEGMENTS ====
+#
+#   segment_id    | north_end     | south_end      | fares    | distance |
+# ----------------|---------------|----------------|----------|
+#   int auto pk   | station_id fk | station_id fk  | intField | ???
+
+class Segment(models.Model):
+    # A related_name argument is added to tell django to genrate unique names for them
+    seg_north_end = models.ForeignKey(Station, related_name='n_end+', verbose_name='Segment North End')
+    seg_south_end = models.ForeignKey(Station, related_name='s_end+', verbose_name='Segment South End')
+    seg_fare = models.IntegerField(default=0, verbose_name='Fare')
 
     def __unicode__(self):
-        return self.sf_date
+        return self.seg_fare
+
+
+
+# ==== SEATS_FREE ====
+#
+#  seats_free_id  | sf_segment      | sf_date    |   sf_train_num    |
+# ----------------|-----------------|------------|-------------------|
+#   int auto pk   | segment_id *pk* |  dateField |    train_id *pk*  |
+
+# class SeatsFree(models.Model):
+# #     sf_segment = models.ForeignKey(Segment, related_name='seg+', verbose_name='Segment')
+# #     sf_train = models.ForeignKey(Train, related_name='sf_train+', verbose_name='Train in Segment')
+#     sf_date = models.DateField(verbose_name='Date')
+# #
+# #     # This allows us to create join together two columns
+# #     class Meta:
+# #         unique_together = (('sf_segment', 'sf_train'),)
+# #
+#     def __unicode__(self):
+#         return self.sf_date
+
 
 
 # ==== PAYMENT_METHOD ====
@@ -87,47 +112,65 @@ class PaymentMethod(models.Model):
         return self.type
 
 
+
 # ==== TRIPS ====
 #
 #   trip_id    | trip_start  | trip_end   | trip_train | fare | payment_method |
 # -------------|-------------|------------|------------|------|----------------|
 #  int auto pk | station_id  | station_id | train_id pk| int  | visa/master/   |
 #
-# trip_date_from | trip_date_to   | trip_seg_start  | trip_seg_end  |
-# ---------------|----------------|-----------------|---------------|
-# dateField      | dateField/NULL |  segment_id FK  | segment_id FK |
+# trip_date | trip_seg_start  | trip_seg_end  |
+# ----------|-----------------|---------------|
+# dateField |  segment_id FK  | segment_id FK |
 
 class TicketTrips(models.Model):
-    trip_start = models.ForeignKey(Station, verbose_name='Trip Start Station') # unique true ?
-    trip_end = models.ForeignKey(Station, verbose_name='Trip End Station') # unique true ?
-    trip_train = models.ForeignKey(Train, verbose_name='Train')
-    fare = models.ForeignKey(Fare, verbose_name='Fare')
-    trip_payment_method = models.ForeignKey(PaymentMethod, verbose_name='Choose Payment')
-    trip_date = models.ForeignKey() 
+    trip_start = models.OneToOneField(Station, related_name='t_start+', verbose_name='Trip Start Station')
+    trip_end = models.OneToOneField(Station, related_name='t_end+', verbose_name='Trip End Station')
+    trip_train = models.OneToOneField(Train, verbose_name='Train')
+    #fare = models.ForeignKey(Fare, verbose_name='Fare')
+    trip_payment_method = models.OneToOneField(PaymentMethod, verbose_name='Choose Payment')
+    trip_date = models.DateField(default=date.today, verbose_name='Trip Date')
+    trip_segment_start = models.OneToOneField(Segment, related_name='s_start+', verbose_name='Segment Start')
+    trip_segment_end = models.OneToOneField(Segment, related_name='s_end+', verbose_name='Segment End')
+
+    def __unicode__(self):
+        return self.trip_start
 
 
-# FARE
+
+# # FARE ??? Do we need a table for fares ? not sure
+# # get a reasonable fair between boston and washington and spread out the fares btw the segments
 #
-# get a reasonable fair between boston and washington and spread out the fares btw the segments
+# #   fare_id   |   seg_start     | price |
+# # ------------|-----------------|-------|
+# # int auto pk |  segment_id FK  | int   |
+#
+#
+# class Fare(models.Model):
+#     fare_
 
-                                    # ====================================
-                                    # ============ RELATIONS =============
-                                    # ====================================
 
-# STOPS_AT
+
+
+# ==== STOPS_AT ====
 #
 #   train_num    | station_id      | time_in    | time_out  |
 # ---------------|-----------------|------------|-----------|
 #   int fk train | station_id fk   | time type  | time type |
 
 
+class StopsAt(models.Model):
+    sa_train = models.ForeignKey(Train, verbose_name='Which Train?')
+    sa_station = models.ManyToManyField(Station, verbose_name='Station Where Train Stops')
+    sa_time_in = models.DateField(verbose_name='Time-In of Train at Station')
+    sa_time_out = models.DateField(verbose_name='Time-out of train at Station')
 
-# SEGMENTS/SECTIONS
-#
-#   segment_id    | north_end     | south_end      | fares    | distance |
-# ----------------|---------------|----------------|----------|
-#   int auto pk   | station_id fk | station_id fk  | intField |
+    def __unicode__(self):
+        return self.sa_time_in
 
+
+
+# https://data.cusp.nyu.edu/filebrowser/#/user/eames01
 
 
 

@@ -8,8 +8,7 @@ from datetime import date
 # In models.py each class is a table in the database and each variable is a column
 
 
-
-
+e
 # ==== STATION ====
 #
 #   Station_id    | station_name | station_symbol |
@@ -128,7 +127,7 @@ class TicketTrips(models.Model):
     trip_end = models.OneToOneField(Station, related_name='t_end+', verbose_name='Trip End Station')
     trip_train = models.OneToOneField(Train, verbose_name='Train')
     #fare = models.ForeignKey(Fare, verbose_name='Fare')
-    trip_payment_method = models.OneToOneField(PaymentMethod, verbose_name='Choose Payment')
+    trip_pay_method = models.OneToOneField(PaymentMethod, verbose_name='Choose Payment')
     trip_date = models.DateField(default=date.today, verbose_name='Trip Date')
     trip_segment_start = models.OneToOneField(Segment, related_name='s_start+', verbose_name='Segment Start')
     trip_segment_end = models.OneToOneField(Segment, related_name='s_end+', verbose_name='Segment End')

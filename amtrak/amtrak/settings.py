@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'amtrakmain',
+    'django_extensions',  # Added this package to create ER diagram
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

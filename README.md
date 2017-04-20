@@ -1,5 +1,4 @@
-# AMTRAK PROJECT
-## Optimizing the AMTRAK rail road system
+# AMTRAK PROJECT - Optimizing the AMTRAK rail road system
 
 ## RUNNING SERVER - MIGRATIONS - SQL COMMANDS - ADMIN PAGE 
 ## - READY TO WORK? - RAW SQL COMMANDS WITH DJANGO
@@ -7,7 +6,12 @@
 **NOTE! please read the following first and make no changes to the code yet.** 
 **Once done reading and implementing go to READY TO WORK?**
 
-**NOTE AGAIN! These commands might work differently on windows be careful**
+**NOTE AGAIN! These commands can be different on windows, be careful**
+
+## ER Diagram for Amtrak System
+
+![ER-Amtrak](https://github.com/enzoames/AMTRAK/blob/master/amtrak/ER_AMTRAK.png?raw=true)
+    by: Enzo Ames
 
 ### RUNNING SERVER (locally)
 

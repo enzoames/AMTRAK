@@ -7,11 +7,12 @@ of our table.
 # Register your models here. NOTHING TO DO HERE
 
 from django.contrib import admin
+from .forms import TicketTripForm, PassengerForm
 from .models import Station, Train, Passenger, Segment, PaymentMethod, TicketTrip, StopsAt, SeatsFree
 
 
 class StationAdmin(admin.ModelAdmin):
-    list_display = ['__unicode__', 'station_symbol']  # column names (verbose_name)
+    list_display = ['__unicode__', 'station_symbol']  # column names on admin page (verbose_name)
 
     class Meta:
         model = Station
@@ -32,7 +33,7 @@ class PassengerAdmin(admin.ModelAdmin):
     list_display = ['__unicode__', 'p_l_name', 'billing_address', 'email']
 
     class Meta:
-        model = Passenger
+        model = PassengerForm
 
 admin.site.register(Passenger, PassengerAdmin)
 
@@ -55,15 +56,23 @@ class SeatsFreeAdmin(admin.ModelAdmin):
 admin.site.register(SeatsFree, SeatsFreeAdmin)
 
 
+
 admin.site.register(PaymentMethod)
 
 
+
 class TicketTripAdmin(admin.ModelAdmin):
-    list_display = ['trip_start', 'trip_end', 'trip_train', 'trip_fare', 'trip_pay_method', 'trip_date',
+    list_display = ['trip_start_station', 'trip_end_station', 'trip_train', 'trip_fare', 'trip_pay_method', 'trip_date',
                     'trip_segment_start', 'trip_segment_end']
 
-    class Meta:
-        model = TicketTrip
+    # The model here at admin already assumes a 'form'. For data that the user will be inputting on the GUI -- we will
+    # want to use a model form.
+
+    # class Meta:
+    #     model = TicketTrip
+
+    form = TicketTripForm  # Here we specify the from that was created in forms.py
+
 
 admin.site.register(TicketTrip, TicketTripAdmin)
 

@@ -11,10 +11,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AMTRAK</title>
+    <title>RAIL THE ROAD</title>
 </head>
 <body>
     <h1>CSC 336 Final Project Group 5</h1><break>
-    <h3>AMTRAK Rail Road System</h3>
+    <h3>Rail the Road is a train booking platform</h3><break>
+
+        <!--
+        * method type POST is important, bc we want to save the information they are selecting into our database
+        * action is where is going, like another url, but we don't need one
+        * {% csrf_token %} tells Django that whatever information the user is inputting is safe to save in database
+        -->
+        <form method="POST" action = "">{% csrf_token %}
+
+            {{ form }}
+
+            <input type="submit" value="Buy Ticket"/>
+
+
+        </form>
+
 </body>
 </html>

@@ -13,8 +13,10 @@
 ![ER-Amtrak](https://github.com/enzoames/AMTRAK/blob/master/amtrak/ER_AMTRAK.png?raw=true)
     by: Enzo Ames
 
+## Flowchart for Amtrak System
 ![Flowchart](https://github.com/enzoames/AMTRAK/blob/master/amtrak/Flowchart.jpg?raw=true)
     by: Tasnim Imani
+
 
 ### RUNNING SERVER (locally)
 

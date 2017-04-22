@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from datetime import date
+from django.core.validators import MaxValueValidator
 
 # Create your models here
 # MOST OF THE WORK WILL BE DONE HERE. Please read comments
@@ -21,7 +22,7 @@ class Station(models.Model):
     station_symbol = models.CharField(unique=True, max_length=5, verbose_name='Station Symbol')
 
     def __unicode__(self):  # We need this function bc Django needs a reference to the database table Station
-        return self.station_name  # station_name becomes the reference
+        return unicode(self.station_name) # station_name becomes the reference
 
 
 
@@ -34,14 +35,14 @@ class Station(models.Model):
 class Train(models.Model):
     train_number = models.CharField(null=False, max_length=15, verbose_name='Train Number')
     # 1-1 Field already unique by default
-    start_station = models.ForeignKey(Station, related_name='s_start' ,verbose_name='Start Station')
+    start_station = models.ForeignKey(Station, related_name='s_start', verbose_name='Start Station')
     end_station = models.ForeignKey(Station, related_name='s_end', verbose_name='End Station')
-    train_direction = models.BooleanField(help_text='North = 1, South = 0')
+    train_direction = models.BooleanField(help_text='North = 1, South = 0', verbose_name='Direction')
     train_days = models.CharField(max_length=20, verbose_name='Days train runs', help_text='M-T-W-Th-F-S-Su')
 
 
     def __unicode__(self):
-        return self.train_number
+        return unicode(self.train_number)
 
 
 
@@ -76,7 +77,7 @@ class Segment(models.Model):
     seg_distance = models.IntegerField(default=0, verbose_name='Mileage Between Stations', null=False)
 
     def __unicode__(self):
-        return self.seg_fare
+        return unicode(self.seg_north_end)
 
 
 
@@ -87,17 +88,20 @@ class Segment(models.Model):
 #   int auto pk   | segment_id *pk* |  dateField |    train_id *pk*  |
 
 class SeatsFree(models.Model):
-    sf_segment = models.ForeignKey(Segment, related_name='seg+', verbose_name='Segment')
+    sf_segment = models.ForeignKey(Segment, related_name='seg+', verbose_name='Segment',
+                                   help_text='Shows only north-end station of segment')
     sf_train = models.ForeignKey(Train, related_name='sf_train+', verbose_name='Train in Segment')
-    sf_date = models.DateField(verbose_name='Date')
-    sf_count = models.IntegerField(default=0, verbose_name='Free Seats in Segment')
+    sf_date = models.DateTimeField(verbose_name='Date', help_text='All reservations start June 1st 2017, 6:00am')
+    # validator sets the max value for count to 448
+    sf_count = models.PositiveIntegerField(validators=[MaxValueValidator(448)], verbose_name='Free Seats in Segment',
+                                           help_text='0 <= n <= 448')
 
     # This allows us to create join together two columns
     class Meta:
         unique_together = (('sf_segment', 'sf_train'),)
 
     def __unicode__(self):
-        return self.sf_date
+        return unicode(self.sf_train)
 
 
 
@@ -128,15 +132,18 @@ class PaymentMethod(models.Model):
 class TicketTrip(models.Model):
     trip_start = models.ForeignKey(Station, related_name='t_start+', verbose_name='Trip Start Station')
     trip_end = models.ForeignKey(Station, related_name='t_end+', verbose_name='Trip End Station')
+    #trip_direction = models.BooleanField(default=1, help_text='North = 1, South = 0', verbose_name='Direction')
     trip_train = models.ForeignKey(Train, verbose_name='Train')
-    fare = models.IntegerField(default=0, verbose_name='Fare')
+    trip_fare = models.IntegerField(default=0, verbose_name='Fare')
     trip_pay_method = models.OneToOneField(PaymentMethod, verbose_name='Choose Payment')
     trip_date = models.DateField(default=date.today, verbose_name='Trip Date')
-    trip_segment_start = models.ForeignKey(Segment, related_name='s_start+', verbose_name='Segment Start')
-    trip_segment_end = models.ForeignKey(Segment, related_name='s_end+', verbose_name='Segment End')
+    trip_segment_start = models.ForeignKey(Segment, related_name='s_start+', verbose_name='Segment Start',
+                                           help_text='Shows only north-end station of segment')
+    trip_segment_end = models.ForeignKey(Segment, related_name='s_end+', verbose_name='Segment End',
+                                         help_text='Shows only north-end station of segment')
 
     def __unicode__(self):
-        return self.trip_start
+        return unicode(self.trip_start)
 
 
 
@@ -169,7 +176,7 @@ class StopsAt(models.Model):
     sa_time_out = models.TimeField(verbose_name='Time-out of train at Station', null=True, blank=True)
 
     def __unicode__(self):
-        return unicode(self.sa_time_in)  # expects an unicode as a return, therefore wrap it as a unicode
+        return unicode(self.sa_train)  # expects an unicode as a return, therefore wrap it as a unicode
 
 
 

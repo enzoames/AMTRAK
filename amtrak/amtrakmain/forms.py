@@ -16,24 +16,27 @@ class TicketTripForm(forms.ModelForm):
         model = TicketTrip  # specifying which model we are creating a form for
         # Now, we need to explicitly declare what fields will be included in this form ( Fields to be displayed on the
         # front-end side). The fields are the columns in the model TicketTrips
-        fields = ['trip_start_station', 'trip_end_station', 'trip_date', 'trip_pay_method']
+        fields = ['trip_start_station', 'trip_end_station', 'trip_pay_method', 'trip_date', 'trip_train', 'trip_fare',
+                  'trip_segment_start', 'trip_segment_end']
 
-    def clean_trip_start_station(self):
-        t_start = self.cleaned_data.get('trip_start')
-        # write validation code here
-        return t_start
-
-    def clean_trip_end_station(self):
-        t_end = self.cleaned_data.get('trip_end')
-        # write validation code here
-        return t_end
-
-    def clean_trip_date(self):
-        t_date = self.cleaned_data.get('trip_date')
-        # write validation code here
-        return t_date
+        # widgets = {'trip_date': forms.DateField(attrs={'class': 'datepicker', 'id': 'data_input', }), }
 
 
+
+    # def clean_trip_start_station(self):
+    #     t_start = self.cleaned_data.get('trip_start')
+    #     # write validation code here
+    #     return t_start
+    #
+    # def clean_trip_end_station(self):
+    #     t_end = self.cleaned_data.get('trip_end')
+    #     # write validation code here
+    #     return t_end
+    #
+    # def clean_trip_date(self):
+    #     t_date = self.cleaned_data.get('trip_date')
+    #     # write validation code here
+    #     return t_date
 
 
     # def clean_trip_segment_start(self):
@@ -46,7 +49,6 @@ class TicketTripForm(forms.ModelForm):
     # def clean_trip_fare(self):
     #
     # def clean_trip_train(self):
-
 
 
 class PassengerForm(forms.ModelForm):

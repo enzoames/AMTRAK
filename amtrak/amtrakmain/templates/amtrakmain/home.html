@@ -16,6 +16,19 @@
 <body>
     <h1>CSC 336 Final Project Group 5</h1><break>
     <h3>Rail the Road is a train booking platform</h3><break>
+        <h4>{{ title }}</h4>
+
+
+
+    <meta charset="utf-8" />
+    <title>Form</title>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+
+
+
 
         <!--
         * method type POST is important, bc we want to save the information they are selecting into our database
@@ -24,11 +37,12 @@
         -->
         <form method="POST" action = "">{% csrf_token %}
 
-            {{ form }}
+            <p>Trip Start Station</p> {{ form.trip_start_station }}
+            <p>Trip End Station</p> {{ form.trip_end_station }}
+            <p>Payment Method</p> {{ form.trip_pay_method }}
+            <p>Date</p> {{ form.trip_date }}
 
             <input type="submit" value="Buy Ticket"/>
-
-
         </form>
 
 </body>

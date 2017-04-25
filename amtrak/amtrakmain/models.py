@@ -40,10 +40,8 @@ class Train(models.Model):
     train_direction = models.BooleanField(help_text='North = 1, South = 0', verbose_name='Direction')
     train_days = models.CharField(max_length=20, verbose_name='Days train runs', help_text='M-T-W-Th-F-S-Su')
 
-
     def __unicode__(self):
         return unicode(self.train_number)
-
 
 
 # ==== PASSENGERS =====
@@ -135,16 +133,24 @@ class TicketTrip(models.Model):
     #trip_direction = models.BooleanField(default=1, help_text='North = 1, South = 0', verbose_name='Direction')
     trip_train = models.ForeignKey(Train, verbose_name='Train')
     trip_fare = models.IntegerField(default=0, verbose_name='Fare')
-    trip_pay_method = models.OneToOneField(PaymentMethod, verbose_name='Choose Payment')
-    trip_date = models.DateField(verbose_name='Trip Date')
+    trip_pay_method = models.ForeignKey(PaymentMethod, related_name='t_pay', verbose_name='Choose Payment')
+    trip_date = models.DateTimeField(verbose_name='Trip Date')
     trip_segment_start = models.ForeignKey(Segment, related_name='s_start+', verbose_name='Segment Start',
                                            help_text='Shows only north-end station of segment')
     trip_segment_end = models.ForeignKey(Segment, related_name='s_end+', verbose_name='Segment End',
                                          help_text='Shows only north-end station of segment')
 
     def __unicode__(self):
-        return unicode(self.trip_start_station)
+        return self.trip_start_station % ""
 
+    # def get_field_value(self, field):
+    #     if isinstance(field, models.CharField) and field.choices:
+    #         return getattr(self, 'get_{}_display'.format(field.name))()
+    #     return unicode(getattr(self, field.name))
+    #
+    # def get_fields(self):
+    #     # called by the template
+    #     return [(field.verbose_name, self.get_field_value(field)) for field in type(self)._meta.fields]
 
 
 # # FARE ??? Do we need a table for fares ? not sure

@@ -16,8 +16,9 @@ class TicketTripForm(forms.ModelForm):
         model = TicketTrip  # specifying which model we are creating a form for
         # Now, we need to explicitly declare what fields will be included in this form ( Fields to be displayed on the
         # front-end side). The fields are the columns in the model TicketTrips
-        fields = ['trip_start_station', 'trip_end_station', 'trip_pay_method', 'trip_date', 'trip_train', 'trip_fare',
-                  'trip_segment_start', 'trip_segment_end']
+        fields = ('trip_start_station', 'trip_end_station', 'trip_pay_method', 'trip_date')
+
+                  # 'trip_train', 'trip_fare', 'trip_segment_start', 'trip_segment_end']
 
         # widgets = {'trip_date': forms.DateField(attrs={'class': 'datepicker', 'id': 'data_input', }), }
 

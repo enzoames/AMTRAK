@@ -20,13 +20,12 @@
 
 
 
-    <meta charset="utf-8" />
-    <title>Form</title>
-    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-    <link rel="stylesheet" href="/resources/demos/style.css" />
-
+    <!--<meta charset="utf-8" />-->
+    <!--<title>Form</title>-->
+    <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />-->
+    <!--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>-->
+    <!--<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>-->
+    <!--<link rel="stylesheet" href="/resources/demos/style.css" />-->
 
 
 
@@ -37,10 +36,12 @@
         -->
         <form method="POST" action = "">{% csrf_token %}
 
-            <p>Trip Start Station</p> {{ form.trip_start_station }}
-            <p>Trip End Station</p> {{ form.trip_end_station }}
-            <p>Payment Method</p> {{ form.trip_pay_method }}
-            <p>Date</p> {{ form.trip_date }}
+
+            {{ form }}
+            <!--<p>Trip Start Station</p> {{ form.trip_start_station }}-->
+            <!--<p>Trip End Station</p> {{ form.trip_end_station }}-->
+            <!--<p>Payment Method</p> {{ form.trip_pay_method }}-->
+            <!--<p>Date</p> {{ form.trip_date }}-->
 
             <input type="submit" value="Buy Ticket"/>
         </form>

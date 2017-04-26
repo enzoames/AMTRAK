@@ -19,59 +19,69 @@ from .models import TicketTrip
 
 
 def home(request):
+    # Adding Form here: Either has a "POST' which contains user inputs or None which will be empty form
+    form = TicketTripForm(request.POST or None)
+    #print form
     print request
     context = {}
 
-    if request.method == 'POST':
-        form = TicketTripForm(request.POST or None)
+    if request.method == 'POST':  # This statement is executed when the user clicks on 'buy ticket' button
         print request.POST
-        # print request.POST['trip_start_station']  # type is unicode
+        print request.POST['trip_start_station']  # type is unicode
         # print request.POST.get('trip_start_station')
         # print "SMART TEXT:", smart_text(request.POST.get('trip_start_station'), encoding='utf-8')
 
-        # This method is executed when the user clicks on 'buy ticket' button and as long as everything in
-        # forms.TicketTripForm is valid and works fine.
-        if form.is_valid():
+        userSelectedStartTrip = request.POST['trip_start_station']
+
+        # blog.object.get()
+
+        userSelectedEndTrip = request.POST['trip_end_station']
+
+        # COMPUTE HERE THE OTHER PARTS OF THE FORM THAT NEED TO BE FILLED OUT
+
+        if form.is_valid():  # Checks the validity of the from they submitted
             print ('Form is Valid...')
             # create a form instance and populate it with data from the request (user input)
-            # instance = TicketTripForm(request.POST)  # This process is called binding data to the form
-            SaveTripTicket = form.save(commit=False)
 
-            userSelectedStartTrip = request.POST['trip_start_station']
-            userSelectedEndTrip = request.POST['trip_end_station']
+            # form.data['segmet'] = computed data
 
+            # instanceTripTicket = form.save(commit=False)
 
 
-            #def calculateSegements
+
+            #instanceTripTicket.trip_segment_start =
+            # instanceTripTicket.trip_segment_end =
+            # instanceTripTicket.trip_fare =
+            # instanceTripTicket.trip_train =
+
+
+
+
+
 
             #instance_TicketTrip = TicketTrip.objects.raw()
 
-            # SaveTripTicket.trip_segment_start =
-            # SaveTripTicket.trip_segment_end =
-            # SaveTripTicket.trip_fare =
-            # SaveTripTicket.trip_train =
+
 
             #model = TicketTrip()
 
             # Do something here if needed; Calculate other the remaining columns of the database
 
             form.save()  # Save to Database
-            # Updating form to display new context
+
+            # Updating context to be displayed
             context = {
                 'title': 'Thank you for booking a ticket',
             }
 
     else:
         title = 'Welcome'
-        # Adding Form here: must create an instance of the class
-        form = TicketTripForm(request.POST or None)
 
         # Adding some context to home.html. It allows us to use some sort of object and bring that into our template
         context = {
             'title': title,
             'form': form,
         }
-
 
     # render combines the request, the template and the context created.
     return render(request, 'amtrakmain/home.html', context)

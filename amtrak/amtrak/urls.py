@@ -23,6 +23,8 @@ from django.contrib import admin
 # These are all the URLS we will need for our site
 
 urlpatterns = [
-    url(r'^', include('amtrakmain.urls')),
+    url(r'^', include('amtrakmain.urls')),  # including the urls belonging to amtrak app
     url(r'^admin/', admin.site.urls),
+    # Another way of writing the url pattern for a view
+    # url(r'SomeName^$', <app_name>.views.function_name>)
 ]

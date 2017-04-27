@@ -12,56 +12,59 @@ This is also where we will render (present to user) our forms created in forms.p
 
 from django.shortcuts import render
 from .forms import TicketTripForm, PassengerForm
-from .models import TicketTrip
+from .models import TicketTrip, Segment, Station
 # from django.utils.encoding import smart_text
-
-# Create your views here. Nothing to do here, but read comments and understand
-
 
 def home(request):
     # Adding Form here: Either has a "POST' which contains user inputs or None which will be empty form
     form = TicketTripForm(request.POST or None)
-    #print form
     print request
     context = {}
 
     if request.method == 'POST':  # This statement is executed when the user clicks on 'buy ticket' button
         print request.POST
-        print request.POST['trip_start_station']  # type is unicode
-        # print request.POST.get('trip_start_station')
-        # print "SMART TEXT:", smart_text(request.POST.get('trip_start_station'), encoding='utf-8')
-
-        userSelectedStartTrip = request.POST['trip_start_station']
-
-        # blog.object.get()
-
-        userSelectedEndTrip = request.POST['trip_end_station']
 
         # COMPUTE HERE THE OTHER PARTS OF THE FORM THAT NEED TO BE FILLED OUT
 
+        userSelectedStartTrip = request.POST['trip_start_station']
+        userSelectedEndTrip = request.POST['trip_end_station']
+
+        print ('\n\nStart Station: ')
+        print(userSelectedStartTrip)
+        print type(userSelectedStartTrip)
+
+        print ('\n\nEnd Station: ')
+        print(userSelectedEndTrip)
+        print type(userSelectedEndTrip)
+
+        userStartTripStation = Station.objects.get(id=userSelectedStartTrip)
+        userEndTripStation = Station.objects.get(id=userSelectedEndTrip)
+
+        print "\n\n USER START STATION", userStartTripStation
+        print "\n\n USER END STATION", userEndTripStation
+
+        south_end = Segment.objects.get(seg_south_end=userStartTripStation)
+        north_end = Segment.objects.get(seg_north_end=userEndTripStation)
+
+        print "\n\n USER SOUTH END", south_end
+        print "\n\n USER NORTH END", north_end
+
+        # TODO: the seg_north_end, seg_south_end are not mathcing correctly, needs fixing.
+
         if form.is_valid():  # Checks the validity of the from they submitted
-            print ('Form is Valid...')
+            print ('\n\n\nForm is Valid...\n\n\n')
             # create a form instance and populate it with data from the request (user input)
 
             # form.data['segmet'] = computed data
 
-            # instanceTripTicket = form.save(commit=False)
-
-
+            instanceTripTicket = form.save(commit=False)
 
             #instanceTripTicket.trip_segment_start =
             # instanceTripTicket.trip_segment_end =
             # instanceTripTicket.trip_fare =
             # instanceTripTicket.trip_train =
 
-
-
-
-
-
             #instance_TicketTrip = TicketTrip.objects.raw()
-
-
 
             #model = TicketTrip()
 

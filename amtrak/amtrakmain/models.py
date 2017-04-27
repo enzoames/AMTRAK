@@ -131,17 +131,21 @@ class TicketTrip(models.Model):
     trip_start_station = models.ForeignKey(Station, related_name='t_start+', verbose_name='Trip Start Station')
     trip_end_station = models.ForeignKey(Station, related_name='t_end+', verbose_name='Trip End Station')
     #trip_direction = models.BooleanField(default=1, help_text='North = 1, South = 0', verbose_name='Direction')
-    trip_train = models.ForeignKey(Train, verbose_name='Train')
-    trip_fare = models.IntegerField(default=0, blank=True, null=True, verbose_name='Fare')
+
+    trip_train = models.ForeignKey(Train, verbose_name='Train', blank=True, null=True)
+
+    trip_fare = models.IntegerField(default=0, verbose_name='Fare')
+
     trip_pay_method = models.ForeignKey(PaymentMethod, related_name='t_pay', verbose_name='Choose Payment')
-    trip_date = models.DateField(verbose_name='Trip Date', blank=True, null=True)
+    trip_date = models.DateField(verbose_name='Trip Date')
+
     trip_segment_start = models.ForeignKey(Segment, related_name='s_start+', verbose_name='Segment Start',
                                            help_text='Shows only north-end station of segment', blank=True, null=True)
     trip_segment_end = models.ForeignKey(Segment, related_name='s_end+', verbose_name='Segment End',
                                          help_text='Shows only north-end station of segment', blank=True, null=True)
 
     def __unicode__(self):
-        return self.trip_start_station % ""
+        return unicode(self.trip_start_station)
 
     # def get_field_value(self, field):
     #     if isinstance(field, models.CharField) and field.choices:

@@ -151,4 +151,8 @@ If you have any problems catch me before or after class
 
 ### RAW SEQUEL COMMANDS WITH DJANGO
 
-Soon. . .
+python manage.py shell
+
+from amtrakmain.models import <name_of_table_here'>
+
+you can also create tables here, ex: Train.objects.create()

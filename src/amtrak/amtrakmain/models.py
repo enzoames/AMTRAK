@@ -95,11 +95,11 @@ class SeatsFree(models.Model):
                                            help_text='0 <= n <= 448')
 
     # This allows us to create join together two columns
-    class Meta:
-        unique_together = (('sf_segment', 'sf_train'),)
+    # class Meta:
+    #     unique_together = (('sf_segment', 'sf_train'),)
 
     def __unicode__(self):
-        return unicode(self.sf_train)
+        return unicode(self.sf_segment)
 
 
 

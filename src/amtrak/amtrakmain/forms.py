@@ -8,6 +8,20 @@ Validating data:
 
 from django import forms
 from .models import Station, Train, Passenger, Segment, PaymentMethod, TicketTrip, StopsAt, SeatsFree
+import datetime
+
+TIMES = ('00:00:00', '06:00:00', '08:00:00', '12:08:00', '15:23:00')
+
+# This class will generate a search form if there is an available train and if it has empty seats based on the the
+# user input of start_station, end_station, and time.
+class SearchTrainForm(forms.Form):
+    start = forms.ModelChoiceField(queryset=Station.objects.all())
+    end = forms.ModelChoiceField(queryset=Station.objects.all())
+    date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S'], widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S'))
+    #date = forms.TimeField(widget=forms.MultipleChoiceField(required=True, choices=TIMES,))
+
+    # CREATE VALIDATION FOR DATE !!!!!
+
 
 
 class TicketTripForm(forms.ModelForm):
@@ -17,39 +31,6 @@ class TicketTripForm(forms.ModelForm):
         # Now, we need to explicitly declare what fields will be included in this form ( Fields to be displayed on the
         # front-end side). The fields are the columns in the model TicketTrips
         fields = ('trip_start_station', 'trip_end_station', 'trip_pay_method', 'trip_date')
-
-                  # 'trip_train', 'trip_fare', 'trip_segment_start', 'trip_segment_end']
-
-        # widgets = {'trip_date': forms.DateField(attrs={'class': 'datepicker', 'id': 'data_input', }), }
-
-
-
-    # def clean_trip_start_station(self):
-    #     t_start = self.cleaned_data.get('trip_start')
-    #     # write validation code here
-    #     return t_start
-    #
-    # def clean_trip_end_station(self):
-    #     t_end = self.cleaned_data.get('trip_end')
-    #     # write validation code here
-    #     return t_end
-    #
-    # def clean_trip_date(self):
-    #     t_date = self.cleaned_data.get('trip_date')
-    #     # write validation code here
-    #     return t_date
-
-
-    # def clean_trip_segment_start(self):
-    #     t_s_start = self.cleaned_data('trip_segment_start')
-    #
-    #    return t_s_start
-
-    # def clean_trip_segment_end(self):
-    #
-    # def clean_trip_fare(self):
-    #
-    # def clean_trip_train(self):
 
 
 class PassengerForm(forms.ModelForm):

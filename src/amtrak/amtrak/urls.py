@@ -16,7 +16,9 @@ Including another URLconf
 
 # DO NOT TOUCH THIS FILE AT ALL. NOTHING TO DO HERE !
 
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 
 
@@ -25,6 +27,10 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^', include('amtrakmain.urls')),  # including the urls belonging to amtrak app
     url(r'^admin/', admin.site.urls),
+    #url(r'^search/', include('amtrakmain.urls'))
     # Another way of writing the url pattern for a view
     # url(r'SomeName^$', <app_name>.views.function_name>)
 ]
+#
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

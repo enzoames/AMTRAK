@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase</title>
+</head>
+<body>
+    <h1> Complete your purchase</h1>
+
+    <h3>List of available trains for the given time: Please click one to complete purchase </h3>
+        {% for train in available_trains %}
+        <h4> {{ train.train_number }} {{train.start_station}} {{train.end_station}} </h4>
+        {% endfor %}
+
+
+</body>
+</html>

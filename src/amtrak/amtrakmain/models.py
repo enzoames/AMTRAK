@@ -137,7 +137,7 @@ class TicketTrip(models.Model):
     trip_fare = models.IntegerField(default=0, verbose_name='Fare')
 
     trip_pay_method = models.ForeignKey(PaymentMethod, related_name='t_pay', verbose_name='Choose Payment')
-    trip_date = models.DateField(verbose_name='Trip Date')
+    trip_date = models.DateTimeField(verbose_name='Trip Date')
 
     trip_segment_start = models.ForeignKey(Segment, related_name='s_start+', verbose_name='Segment Start',
                                            help_text='Shows only north-end station of segment', blank=True, null=True)

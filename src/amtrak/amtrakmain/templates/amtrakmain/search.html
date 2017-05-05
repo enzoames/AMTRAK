@@ -1,0 +1,52 @@
+<!--
+ HTML. This is where our GUI will be implemented.
+
+ Keep in mid that the GUI doesnt need to look really fancy, it just needs to operate as desired.
+ It should be able to fetch the necessary information in our database and output it for the user to see
+ -->
+
+{% extends "homepage/base.html" %}
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+
+<body>
+
+
+
+<div class="container">
+{% block content %}
+
+{% load staticfiles %}
+
+
+        <form method="POST" action = "">{% csrf_token %}
+
+            <p>From</p> {{ form1.start }}
+            <br><br>
+            <p>To</p> {{ form1.end }}
+            <br><br>
+            <p>Date</p> {{ form1.date }}
+            <br><br>
+            <br><br><br><br>
+
+            <input type="submit" value="Search Train"/>
+
+        </form>
+
+
+{% endblock content %}
+</div>
+
+
+
+</body>
+</html>
+
+
+
+

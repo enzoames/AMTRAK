@@ -1,6 +1,5 @@
+{% extends 'homepage/base.html' %}
 
-{% load staticfiles %}
-{% block content %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -9,20 +8,32 @@
     <title>Train Information</title>
 </head>
 <body>
-    <h1>CSC 336 Final Project Group 5</h1><br>
-        <link rel="stylesheet" href='{% static "css/base.css" %}' />
-    <h2>R&Ris a train booking platform</h2><br>
+
+    <div class="container">
+    {% block content %}
+
 
         <h3>{{ title }}</h3>
         <h4>Depart: </h4>{{ start_station }}
         <h4>Departure Date: </h4>{{ depart_time }}
         <h4>Arrive: </h4>{{ end_station }}
-        <h4>Train Number: </h4>{{ train_number }}<br><br><br>
+        <h4>Train Number: </h4>{{ train_number }}<br><br>
 
-        <input type="button" value="Book Ticket Now!" href="/purchase/"/><br><br>
-        <input type="submit" value="Cancel Selection"/>
+        <a href='/purchase/'>Purchase Ticket</a>
+        <br><br>
+        <a href='/search/'>Search for another train</a>
+        <br><br>
+        <a href='/'>Cancel Selection</a>
+
+        <!--<input type="button" value="Book Ticket Now!" href="/purchase/"/><br><br>-->
+        <!--<input type="submit" value="Cancel Selection"/>-->
+
+
+
+    {% endblock content %}
+    </div>
+
 
 </body>
 </html>
 
-{% endblock %}

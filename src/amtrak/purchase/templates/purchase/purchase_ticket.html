@@ -1,0 +1,36 @@
+{% extends 'homepage/base.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase</title>
+</head>
+<body>
+
+
+    <div class="container">
+    {% block content %}
+
+    <h2> Complete your purchase</h2>
+
+        <form method="POST" action = "">{% csrf_token %}
+
+            <p>Depart From</p> {{ form.trip_start_station }}
+            <br><br>
+            <p>Arrive To</p> {{ form.trip_end_station }}
+            <br><br>
+            <p>Trip Date</p> {{ form.trip_date }}<p>Example date: 2017-06-01 06:00:00</p>
+            <br>
+            <p>Payment Method</p> {{ form.trip_pay_method }}
+            <br><br><br>
+            <input type="submit" value="Purchase Ticket!"/>
+
+        </form>
+
+    {% endblock content %}
+    </div>
+
+
+</body>
+</html>

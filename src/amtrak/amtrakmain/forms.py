@@ -7,10 +7,9 @@ Validating data:
 """
 
 from django import forms
-from .models import Station, Train, Passenger, Segment, PaymentMethod, TicketTrip, StopsAt, SeatsFree
+from .models import *
 import datetime
 
-TIMES = ('00:00:00', '06:00:00', '08:00:00', '12:08:00', '15:23:00')
 
 # This class will generate a search form if there is an available train and if it has empty seats based on the the
 # user input of start_station, end_station, and time.

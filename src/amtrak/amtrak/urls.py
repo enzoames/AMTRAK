@@ -25,7 +25,9 @@ from django.contrib import admin
 # These are all the URLS we will need for our site
 
 urlpatterns = [
-    url(r'^', include('amtrakmain.urls')),  # including the urls belonging to amtrak app
+    url(r'^', include('homepage.urls')),
+    url(r'^search/', include('amtrakmain.urls')),  # including the urls belonging to amtrak app
+    url(r'^purchase/', include('purchase.urls')),
     url(r'^admin/', admin.site.urls),
     #url(r'^search/', include('amtrakmain.urls'))
     # Another way of writing the url pattern for a view

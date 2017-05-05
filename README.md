@@ -151,8 +151,17 @@ If you have any problems catch me before or after class
 
 ### RAW SEQUEL COMMANDS WITH DJANGO
 
-python manage.py shell
+    python manage.py shell
 
-from amtrakmain.models import <name_of_table_here'>
+    from amtrakmain.models import <name_of_table_here'>
 
-you can also create tables here, ex: Train.objects.create()
+    you can also create tables here, ex: Train.objects.create()
+
+
+### BOOTSTRAP
+
+Bootstrap is a front-end framework to make building web applications a lot easier
+and faster.
+
+provides you with css and javascripts 
+

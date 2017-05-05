@@ -13,17 +13,18 @@
     <title>RAIL THE ROAD</title>
 </head>
 <body>
-    <h1>CSC 336 Final Project Group 5</h1><break>
+    <h1>CSC 336 Final Project Group 5</h1><br>
         <link rel="stylesheet" href='{% static "css/base.css" %}' />
-    <h2>Rail the Road is a train booking platform</h2><break>
+    <h2>Rail the Road is a train booking platform</h2><br>
 
         <form method="POST" action = "">{% csrf_token %}
 
-            {{ form1 }}
+            {{ form1.as_p }}
 
             <input type="submit" value="Search Train"/>
 
         </form>
+
 
 
         <!--<h4>{{ title }}</h4>-->
@@ -49,3 +50,5 @@
 </html>
 
 {% endblock %}
+
+

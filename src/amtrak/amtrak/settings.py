@@ -33,6 +33,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'homepage',
+    'purchase',
     'amtrakmain',
     'django_extensions',  # Added this package to create ER diagram
     'django.contrib.admin',

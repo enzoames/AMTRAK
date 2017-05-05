@@ -17,11 +17,12 @@ TIMES = ('00:00:00', '06:00:00', '08:00:00', '12:08:00', '15:23:00')
 class SearchTrainForm(forms.Form):
     start = forms.ModelChoiceField(queryset=Station.objects.all())
     end = forms.ModelChoiceField(queryset=Station.objects.all())
-    date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S'], widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S'))
+    date = forms.DateTimeField(input_formats=['%Y-%m-%d %H:%M:%S'],
+                               help_text="Example date: 2017-06-01 06:00:00",
+                               widget=forms.DateTimeInput(format='%Y-%m-%d %H:%M:%S'))
     #date = forms.TimeField(widget=forms.MultipleChoiceField(required=True, choices=TIMES,))
 
     # CREATE VALIDATION FOR DATE !!!!!
-
 
 
 class TicketTripForm(forms.ModelForm):

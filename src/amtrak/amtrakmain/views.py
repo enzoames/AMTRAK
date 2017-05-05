@@ -40,9 +40,10 @@ def search(request):
 
             print context
             # display available trains
-
-            return render(request, 'amtrakmain/result.html', context)
-
+            if len(context) > 1:
+                return render(request, 'amtrakmain/result.html', context)
+            else:
+                return render(request, 'amtrakmain/error.html', context)
     else:
         context = {
             'form1': form1,
@@ -51,22 +52,27 @@ def search(request):
     return render(request, 'amtrakmain/home.html', context)
 
 
+def bookTicket(request):
+    if request.method == 'POST':
+        print "WE MADE IT HERE"
+
+
 # ===========================================
 # ========== COMPUTATION FUNCTIONS ==========
 # ===========================================
 
 
 def searchAvailableTrain(request_POST):
-    # Dictionary will be used to display information
+    # Dictionary will be used to display information to the user
     context = {
         'title': ""
     }
 
-    tempChoiceStartStation = request_POST['start'] # grabs user's selected choice for start station
-    tempChoiceEndStation = request_POST['end'] # grabs user's selected choice for end station
+    tempChoiceStartStation = request_POST['start']  # grabs user's selected choice for start station, which is an id #
+    tempChoiceEndStation = request_POST['end']  # grabs user's selected choice for end station, which is an id #
 
-    tempChoiceStartStation = Station.objects.get(id=tempChoiceStartStation)
-    tempChoiceEndStation = Station.objects.get(id=tempChoiceEndStation)
+    tempChoiceStartStation = Station.objects.get(id=tempChoiceStartStation)  # Specific start station
+    tempChoiceEndStation = Station.objects.get(id=tempChoiceEndStation)  # Specific end station
 
     # Base Case
     if tempChoiceStartStation == tempChoiceEndStation:
@@ -90,67 +96,51 @@ def searchAvailableTrain(request_POST):
         # Else continue to look for empty seats in trip
         else:
             # seatsFreeObjects should be narrow down to one single train, unique time, and one single start station
-            print "FIND SEATS"
-            print type(seatsFreeObjects)
-            print len(seatsFreeObjects)
-            print seatsFreeObjects
-            print seatsFreeObjects[0]
-
-            # startingPoint has attribute segment(has attribute north & south), train, date, and count of open seats
+            # cursorPoint has attribute segment(has attribute north & south), train, date, and count of open seats
             startingPoint = seatsFreeObjects[0]
+            cursorPoint = startingPoint
 
-            if startingPoint.sf_count == 0:
-                message = "Every Ticket is booked at" + str(tempChoiceStartStation) + "at this time" + str(startingPoint.sf_date)
+            if cursorPoint.sf_count == 0:
+                message = "Every Ticket is booked at" + str(tempChoiceStartStation) + "at this time" + str(cursorPoint.sf_date)
                 context['title'] = message
                 return context
 
             else:
-                print "++++++++++++++++++++======================="
-                print "FIRST SEGMENT IN LINE"
-                print "north ", startingPoint.sf_segment.seg_north_end, "\tsouth: ", startingPoint.sf_segment.seg_south_end
+                # This is the segment where the passenger's trip ends
+                tripSegmentEnd = Segment.objects.get(seg_north_end=tempChoiceEndStation)
 
-                """
-                while True:
-                    tempSegment = Segment.objects.get(seg_south_end=startingPoint.sf_segment.seg_north_end)
+                # Check whether there's a free seat along the path of the trip
+                while cursorPoint.sf_segment.id != tripSegmentEnd.id:
 
+                    tempSegment = Segment.objects.get(seg_south_end=cursorPoint.sf_segment.seg_north_end)
                     row = SeatsFree.objects.get(sf_segment=tempSegment)
 
                     if row.sf_count == 0:
                         context['title'] = "Train Booked from destination A to B, please choose a different time"
                         return context
-                """
 
-                # TODO: MODIFY WHILE TRUE STATEMENT. TRAVERSE THROUGH THE SEGMENTS TABLE AND SEATS FREE TABLE
-                # TODO: STARTING POINT =  STARTING POINT. NEXT
+                    cursorPoint = row
 
-                # print "NEXT SEGMENT ON LINE"
-                # print "segment north", row.sf_segment.seg_north_end, "\ttrain", row.sf_train, "\ndate", row.sf_date
-                # print "segment south", row.sf_segment.seg_south_end
+                # Display trip information to user train to user - not saving it!
+                context = {
+                    'title': "Train available",
+                    'start_station': str(tempChoiceStartStation.station_name),
+                    'depart_time': str(tempChoiceDate),
+                    'end_station': str(tempChoiceEndStation.station_name),
+                    # 'arrival_time':
+                    'train_number': str(startingPoint.sf_train),
+                    # 'trip_date':
+                }
 
-
-
-        # This is the segment where the passenger's trip ends
-        # tripSegmentEnd = Segment.objects.get(seg_north_end=tempChoiceEndStation)
-
+                return context
 
     else: # Trip heading south
         Trip_Segment_Start = Segment.objects.get(seg_north_end=tempChoiceStartStation)
         Trip_Segment_End = Segment.objects.get(seg_south_end=tempChoiceEndStation)
 
+
     context['title'] = "NO TITLE"
     return context
-
-
-    #tempStartSegment = Segment.objects.get(id=tempChoiceStartStation) # from segments table
-
-    # print seatsFreeObject.sf_segment, seatsFreeObject.sf_train, seatsFreeObject.sf_date, seatsFreeObject.sf_count
-    #
-    # if seatsFreeObject.sf_count > 1:
-
-
-
-
-
 
 
 

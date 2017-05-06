@@ -13,18 +13,59 @@
 **NOTE! These commands can be different on windows, be careful**
 
 
-## ER Diagram for Amtrak System
+## ER Diagram for Rail Road System
 
 ![ER-Amtrak](https://github.com/enzoames/AMTRAK/blob/master/src/amtrak/ER_AMTRAK.png?raw=true)
     by: Enzo Ames
 
-## Flowchart for Amtrak System
+## Flowchart for RailRoad System
 ![Flowchart](https://github.com/enzoames/AMTRAK/blob/master/src/amtrak/Flowchart.jpg?raw=true)
     by: Tasnim Imani
 
 ### PROFESSOR INSTRUCTIONS
 
+* The src folder is where our entire project lives
+    * Inside amtrak you will find our different django applications
+        * amtrak folder (again) - In this folder you will see different python files that are essential
+            to deploy Django and our database. Most of the code is already presented to you when you start
+            a Django project.
+            
+        * amtrakmain folder - This is the application where the 'Searching Avaiable Train' feature lives
+            * migrations folder - This folder keeps track of all our migrations. Any change we make to
+                an attribute of table will be recorded here. Django takes care of keeping this folder
+                updated. Refer to MIGRATIONS section for more information 
+            * templates folder - This folder contains html files that will be render to the main page
+                depending on the user input. If the user tries to search for an unavailable train, we will
+                display the corresponding html file.
+            * models.py - This is the most important python file in our project. This is where we instantiate
+                all our database tables. Here we set the values of each attribute and the relation from one
+                table to another.
+            * forms.py - The user is presented with a form in which he will have to fill out in order for us
+                to proccess his request. This file is where the structure of the form is created. The form
+                follows grabs information from models.py.
+            * views.py - In this file we do most of our computation. When a user fill out the form, this takes
+                care of processing the request and displaying the right information. Nothing is save to
+                database since this feature only allows for the user for search if train is available.
+            * init.py, admin.py, app.py, tests.py, urls.py - little or some work was done in these files.
+                not too important in the bigger picture.  
 
+        * homepage folder - Contains similar files to amtrakmain but are not populated with much code
+            * templates/homepage folder - Is where our base.html lives. This file contains our boostrap content
+                * base.html - This file contains the basic structure and apperance of our site. You will
+                    notice that other html files accross our application __extend__ this file, bc we want
+                    maintain the structure/look constant, hence the name __base__
+
+        * purchase folder - This is where the 'Book Ticket' feature lives
+            * views.py - This file takes care of dealing with the request coming from the user when it 
+                wants to book a ticket. This is where we check for free seats, compute fare, compute train,
+                arrival dates, and save to database. Once user has checked the availability of train, it will
+                proceed to this form and fill out the required information to purchase ticket
+            * remaining python file have little or no importance. 
+
+        * static/css - where some other css files created by me live, nothing much to see here. 
+
+    * static_cdn - this is where the html, css, javascript for the Django admin lives. This was provided by
+        the framework at the moment of creation
 
 
 ### RUNNING SERVER (locally)

@@ -1,12 +1,17 @@
-# AMTRAK PROJECT - Optimizing the AMTRAK rail road system
+# Rail Road Poject - Optimizing the AMTRAK rail road system
 
-## RUNNING SERVER - MIGRATIONS - SQL COMMANDS - ADMIN PAGE 
-## - READY TO WORK? - RAW SQL COMMANDS WITH DJANGO
+### | PROFESSOR INSTRUCTIONS | RUNNING SERVER | MIGRATIONS |
+
+### | SQL COMMANDS | ADMIN PAGE | READY TO WORK? |
+
+### | RAW SQL COMMANDS WITH DJANGO | BOOTSTRAP |
+
 
 **NOTE! please read the following first and make no changes to the code yet.** 
-**Once done reading and implementing go to READY TO WORK?**
+**Once done reading and implementing go to READY TO WORK? section**
 
-**NOTE AGAIN! These commands can be different on windows, be careful**
+**NOTE! These commands can be different on windows, be careful**
+
 
 ## ER Diagram for Amtrak System
 
@@ -16,6 +21,10 @@
 ## Flowchart for Amtrak System
 ![Flowchart](https://github.com/enzoames/AMTRAK/blob/master/src/amtrak/Flowchart.jpg?raw=true)
     by: Tasnim Imani
+
+### PROFESSOR INSTRUCTIONS
+
+
 
 
 ### RUNNING SERVER (locally)
@@ -151,17 +160,18 @@ If you have any problems catch me before or after class
 
 ### RAW SEQUEL COMMANDS WITH DJANGO
 
+To enter the shell
+
     python manage.py shell
 
-    from amtrakmain.models import <name_of_table_here'>
+    from amtrakmain.models import <name_of_table_here>
 
-    you can also create tables here, ex: Train.objects.create()
+You can also create tables here, ex: Train.objects.create()
 
+Follow the django documentation to see all availble commands
 
 ### BOOTSTRAP
 
-Bootstrap is a front-end framework to make building web applications a lot easier
-and faster.
-
-provides you with css and javascripts 
+Bootstrap is a front-end framework to make building web applications a lot easier and faster.
+It provides you with the necessary files to configure the front end
 

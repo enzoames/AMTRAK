@@ -1,0 +1,7 @@
+dj-database-url==0.4.2
+Django==1.10.6
+Jinja2==2.9.4
+python-dateutil==2.6.0
+gunicorn==19.4.5
+whitenoise==3.3.0
+MySQL-python==1.2.5

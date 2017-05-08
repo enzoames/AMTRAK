@@ -37,9 +37,10 @@ def purchase(request):
 
                 # Updating context to be displayed to user
                 context = {
-                    'start': str(instanceTripTicket.trip_segment_start),
-                    'depart_time': str(request.POST['trip_date']) ,
-                    'end': str(instanceTripTicket.trip_segment_end),
+                    'title': "Thank you for choosing us. Save your ticket information",
+                    'start': str(calculate_trip_info['StartStation']),
+                    'depart_time': str(request.POST['trip_date']),
+                    'end': str(calculate_trip_info['EndStation']),
                     'arrive_time': str(update_info['ArriveDate']),
                     'train': str(update_info['Train']),
                     'fare': str(instanceTripTicket.trip_fare),
@@ -100,6 +101,8 @@ def calculateRemainingParts(request_POST):
                 break
 
     context = {
+        'StartStation': UserStartTripStation,
+        'EndStation': UserEndTripStation,
         'TripSegmentStart': Trip_Segment_Start,
         'TripSegmentEnd': Trip_Segment_End,
         'TripFare': Total_Fare,

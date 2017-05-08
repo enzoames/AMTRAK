@@ -7,6 +7,9 @@ __pycache__/
 .idea
 .idea/*
 
+cloud_sql_proxy
+src/cloud_sql_proxy
+
 # C extensions
 *.so
 

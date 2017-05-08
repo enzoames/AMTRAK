@@ -8,7 +8,6 @@ Validating data:
 
 from django import forms
 from .models import *
-import datetime
 
 
 # This class will generate a search form if there is an available train and if it has empty seats based on the the

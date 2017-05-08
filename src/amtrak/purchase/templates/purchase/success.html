@@ -12,12 +12,15 @@
     <div class="container">
     {% block content %}
 
-        {{ start }}
-        {{ depart_time }}
-        {{ end }}
-        {{ arrive_time }}
-        {{ train }}
-        {{ fare }}
+
+        <h3>{{ title }}</h3>
+        <h4>Departing Station: </h4>{{ start }}
+        <h4>Departure Date: </h4>{{ depart_time }}
+        <h4>Arriving Station: </h4>{{ end }}
+        <h4>Arriving Date: </h4>{{ arrive_time }}
+        <h4>Train Number: </h4>{{ train }}
+        <h4>Fare: $</h4>{{ fare }}
+        <h4>Ticket Number: </h4><br><br>
 
 
     {% endblock content %}

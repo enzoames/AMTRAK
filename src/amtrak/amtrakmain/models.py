@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from django.db import models
-from datetime import date
 from django.core.validators import MaxValueValidator
 
 # Create your models here

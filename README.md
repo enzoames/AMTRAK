@@ -24,6 +24,8 @@
 
 ### PROFESSOR INSTRUCTIONS
 
+The URL of our projet: https://oceanic-gecko-166900.appspot.com/ [**Work In Progress**]
+
 * The src folder is where our entire project lives
     * Inside amtrak you will find our different django applications
         * amtrak folder (again) - In this folder you will see different python files that are essential
@@ -31,6 +33,13 @@
             a Django project.
             
         * amtrakmain folder - This is the application where the 'Searching Avaiable Train' feature lives
+            * management folder - This is where we initially populate our database
+                * populate_db.py - This file contains all the code that populates our database with
+                    initial inputs for the tables Train, StopsAt, Station, SeatsFree, and Segment.
+                    **CURRENT WORK IN PROGRESS** Since we have our server running on the google cloud
+                    platform we need to recreate the tables that once existed in our inital sqlite3 database
+                    to the Mysql database provided to us by google. For example, Seatsfree table is very 
+                    extensive therefore the code in this file will take care of inputting every row.
             * migrations folder - This folder keeps track of all our migrations. Any change we make to
                 an attribute of table will be recorded here. Django takes care of keeping this folder
                 updated. Refer to MIGRATIONS section for more information 

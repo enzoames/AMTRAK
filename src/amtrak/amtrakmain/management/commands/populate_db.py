@@ -7,7 +7,7 @@ THIS IS WHERE WE POPULATE OUR DATABASE
 
 from django.core.management.base import BaseCommand
 from amtrakmain.models import *
-import datetime
+from datetime import date, datetime, time, timedelta
 
 class Command(BaseCommand):
     args = '<foo bar ...>'
@@ -75,6 +75,33 @@ class Command(BaseCommand):
                     "13:01:00", "13:22:00", "13:36:00", "13:48:00", "14:05:00", "14:44:00", "15:23:00", "15:42:00",
                     "15:47:00"]
 
+        06:10:00
+        06:22:00
+        06:38:00
+        07:01:00
+        07:31:00
+        07:51:00
+        08:26:00
+        08:51:00
+        09:03:00
+        09:09:00
+        09:27:00
+        09:53:00
+        10:16:00
+        10:44:00
+        11:08:00
+        12:01:00
+        12:22:00
+        12:36:00
+        12:48:00
+        12:55:00
+        13:34:00
+        14:13:00
+        14:32:00
+        14:37:00
+
+
+
         time_out = ["08:27:00", "08:52:00", "09:04:00", "09:10:00", "10:27:00", "10:54:00", "11:17:00", "11:45:00",
                     "12:28:00", "13:02:00", "13:23:00", "13:37:00", "13:49:00", "14:06:00", "14:45:00", "15:24:00",
                     "15:43:00"]  # last element is null (arriving station)
@@ -82,29 +109,27 @@ class Command(BaseCommand):
         trains = Train.objects.all()
         station = Station.objects.all()
 
+        starting_date = datetime(2017, 6, 1, 06, 00)
 
-        #starting_date = datetime.datetime(2017, 6, 1, 06, 00)
-
-
-
-        starting_time = datetime.datetime(2017, 6, 1, 06, 00).time()
+        starting_time = datetime(2017, 6, 1, 06, 00).time()
 
         time_in_deltas = [10, 12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 26, 23, 28, 24, 53, 21, 14, 12, 7, 39, 39, 19, 5]
 
+        final_time_values = []
 
-        minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
-
-        for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
-            print m.time
-
-
-        for i in range(25):
-
-            if i <=23:
+        for t in time_in_deltas:
+            temp_time = datetime.combine(starting_date, starting_time) + timedelta(minutes=t)
+            final_time_values.append(temp_time)
+            starting_date = temp_time
+            starting_time = starting_date.time()
 
 
 
-            if i == 24:
+        # Another approach, might be useful for different scenario
+        # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
+        #
+        # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
+        #     print m.time
 
 
 

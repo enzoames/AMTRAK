@@ -65,15 +65,6 @@ class Command(BaseCommand):
     # ===============================================
 
     def _populate_stopsat(self):
-        # time_in = ["06:00:00", "06:10:00", "06:22:00", "06:38:00", "07:01:00", "07:31:00", "07:51:00", "08:26:00",
-        #             "08:51:00", "09:03:00", "09:09:00", "09:27:00", "10:53:00", "11:16:00", "11:44:00", "12:08:00",
-        #             "13:01:00", "13:22:00", "13:36:00", "13:48:00", "14:05:00", "14:44:00", "15:23:00", "15:42:00",
-        #             "15:47:00"]
-        #
-        # time_out = ["06:05:00", "06:11:00", "06:23:00", "06:39:00", "07:02:00", "07:32:00", "07:56:00", "08:27:00",
-        #             "08:52:00", "09:04:00", "09:10:00", "10:27:00", "10:54:00", "11:17:00", "11:45:00", "12:28:00",
-        #             "13:02:00", "13:23:00", "13:37:00", "13:49:00", "14:06:00", "14:45:00", "15:24:00", "15:43:00"]
-
         # Computing time in & out values
         starting_date_n1 = datetime(2017, 6, 1, 06, 00)
         starting_date = datetime(2017, 6, 1, 06, 10)
@@ -96,11 +87,20 @@ class Command(BaseCommand):
             starting_date2 = temp_time2
             starting_time2 = starting_date2.time()
 
-        trains = Train.objects.all()
-        station = Station.objects.all()
+        trains_list = Train.objects.all()
+        station_list = Station.objects.all()
 
-
-
+        # for train in trains_list:
+        #       for station in station_list:
+        #           i = 0  # final_time_in_values has 1 more than final_time_out_values
+        #           StopsAt(sa_train = train, sa_station = station,
+        #                   sa_time_in = final_time_in_values[i], sa_time_out = final_time_out_values[i])
+        #
+        #
+        #
+        #
+        #
+        #
 
         # Another approach, might be useful for different scenario
         # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
@@ -108,13 +108,17 @@ class Command(BaseCommand):
         # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
         #     print m.time
 
-
-
     # =======================================
     # =========== HANDLE FUNCTION ===========
     # =======================================
 
     def handle(self, *args, **options):
         # self._populate_station() ALREADY POPULATED NO NEED TO RUN AGAIN
-        # self._populate_trains()
+        # self._populate_trains() ALREADY POPULATED NO NEED TO RUN AGAIN
         self._populate_stopsat()
+
+    # ========================================
+    # =========== HELPER FUNCTIONS ===========
+    # ========================================
+
+    def calculate(self, ):

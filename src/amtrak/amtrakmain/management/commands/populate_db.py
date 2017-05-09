@@ -65,15 +65,45 @@ class Command(BaseCommand):
     # ===============================================
 
     def _populate_stopsat(self):
-        # Computing time in & out values
-        starting_date_n1 = datetime(2017, 6, 1, 06, 00)
-        starting_date = datetime(2017, 6, 1, 06, 10)
-        starting_time = datetime(2017, 6, 1, 06, 10).time()
-        time_in_deltas = [12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 86, 23, 28, 24, 53, 21, 14, 12, 17, 39, 39, 19, 5]
-        final_time_in_values = [starting_date_n1, starting_date]
-        starting_date2 = datetime(2017, 6, 1, 06, 05)
-        starting_time2 = datetime(2017, 6, 1, 06, 05).time()
-        time_out_deltas = [6, 12, 16, 23, 30, 24, 31, 25, 12, 6, 77, 27, 23, 28, 43, 34, 21, 14, 12, 17, 39, 39, 19]
+        # List of staring dates for each train at their starting station
+        starting_dates_list = self.generateDates()
+
+        time_in_deltas = [10, 12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 86, 23, 28, 24, 53, 21, 14, 12, 17, 39, 39, 19, 5]
+        time_out_deltas = [6, 12, 16, 23, 30, 24, 31, 25, 12, 6, 77, 27, 23, 28, 43, 34, 21, 14, 12, 17, 39, 39, 19,
+                           000]
+
+        trains_list = Train.objects.all()
+        station_list = Station.objects.all()
+
+        for train in trains_list:
+            #call helper function
+            self.calculateTime_IN_OUT(starting_date, time_in_deltas, time_out_deltas)
+            for station in station_list:
+                i = 0  # final_time_in_values has 1 more than final_time_out_values
+                StopsAt(sa_train = train, sa_station = station,
+                        sa_time_in = final_time_in_values[i], sa_time_out = final_time_out_values[i])
+
+
+        # Another approach, might be useful for different scenario
+        # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
+        #
+        # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
+        #     print m.time
+
+    # ========================================
+    # =========== HELPER FUNCTIONS ===========
+    # ========================================
+
+    def calculateTime_IN_OUT(self, starting_date, time_in_deltas, time_out_deltas):
+        # *Initial value for time_in for any train*
+        # starting_date => 2017-06-01 06:00:00
+        starting_time = starting_date.time()  # 06:00:00
+        final_time_in_values = [starting_date]  # list contains starting date
+
+        # *Initial value for time_out for any train*
+        # This gives 2017-06-01 06:05:00
+        starting_date2 = datetime.combine(starting_date, starting_time) + timedelta(minutes=5)
+        starting_time2 = starting_date2.time()  # 06:05:00
         final_time_out_values = [starting_date2]
 
         for i in range(len(time_in_deltas)):
@@ -87,26 +117,16 @@ class Command(BaseCommand):
             starting_date2 = temp_time2
             starting_time2 = starting_date2.time()
 
-        trains_list = Train.objects.all()
-        station_list = Station.objects.all()
 
-        # for train in trains_list:
-        #       for station in station_list:
-        #           i = 0  # final_time_in_values has 1 more than final_time_out_values
-        #           StopsAt(sa_train = train, sa_station = station,
-        #                   sa_time_in = final_time_in_values[i], sa_time_out = final_time_out_values[i])
-        #
-        #
-        #
-        #
-        #
-        #
+    def generateDates(self):
+        # Morning: 6am | 8am | 10am |||| Afternoon: 12pm | 2pm | 4pm |||| Evening: 6pm | 8pm ||||
+        deltas = []
 
-        # Another approach, might be useful for different scenario
-        # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
-        #
-        # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
-        #     print m.time
+        date_list = []
+
+        datetime(2017, 6, 1, 06, 00)
+
+        return date_list
 
     # =======================================
     # =========== HANDLE FUNCTION ===========
@@ -117,8 +137,16 @@ class Command(BaseCommand):
         # self._populate_trains() ALREADY POPULATED NO NEED TO RUN AGAIN
         self._populate_stopsat()
 
-    # ========================================
-    # =========== HELPER FUNCTIONS ===========
-    # ========================================
 
-    def calculate(self, ):
+
+
+
+
+            # time_in = ["06:00:00", "06:10:00", "06:22:00", "06:38:00", "07:01:00", "07:31:00", "07:51:00", "08:26:00",
+        #            "08:51:00", "09:03:00", "09:09:00", "09:27:00", "10:53:00", "11:16:00", "11:44:00", "12:08:00",
+        #            "13:01:00", "13:22:00", "13:36:00", "13:48:00", "14:05:00", "14:44:00", "15:23:00", "15:42:00",
+        #            "15:47:00"]
+        #
+        # time_out = ["06:05:00", "06:11:00", "06:23:00", "06:39:00", "07:02:00", "07:32:00", "07:56:00", "08:27:00",
+        #             "08:52:00", "09:04:00", "09:10:00", "10:27:00", "10:54:00", "11:17:00", "11:45:00", "12:28:00",
+        #             "13:02:00", "13:23:00", "13:37:00", "13:49:00", "14:06:00", "14:45:00", "15:24:00", "15:43:00"]

@@ -65,9 +65,8 @@ class Command(BaseCommand):
     # ===============================================
 
     def _populate_stopsat(self):
-        # List of staring dates for each train at their starting station
-        starting_dates_list = self.generateDates()
-
+        # If train arrives at station A at 6am and leaves at 6:10 -> time delta is 10
+        # Same for time_out deltas
         time_in_deltas = [10, 12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 86, 23, 28, 24, 53, 21, 14, 12, 17, 39, 39, 19, 5]
         time_out_deltas = [6, 12, 16, 23, 30, 24, 31, 25, 12, 6, 77, 27, 23, 28, 43, 34, 21, 14, 12, 17, 39, 39, 19,
                            000]
@@ -75,13 +74,18 @@ class Command(BaseCommand):
         trains_list = Train.objects.all()
         station_list = Station.objects.all()
 
+        starting_dates_list = self.generateDates()
+
+        count = 0
         for train in trains_list:
-            #call helper function
-            self.calculateTime_IN_OUT(starting_date, time_in_deltas, time_out_deltas)
+            # call helper function
+            self.calculateTime_IN_OUT(starting_dates_list[count], time_in_deltas, time_out_deltas)
             for station in station_list:
                 i = 0  # final_time_in_values has 1 more than final_time_out_values
-                StopsAt(sa_train = train, sa_station = station,
-                        sa_time_in = final_time_in_values[i], sa_time_out = final_time_out_values[i])
+                StopsAt(sa_train=train, sa_station = station,
+                        sa_time_in=final_time_in_values[i], sa_time_out=final_time_out_values[i])
+
+            count += 1
 
 
         # Another approach, might be useful for different scenario
@@ -94,8 +98,18 @@ class Command(BaseCommand):
     # =========== HELPER FUNCTIONS ===========
     # ========================================
 
+    def generateDates(self):
+        # Morning: 6am | 8am | 10am |||| Afternoon: 12pm | 2pm | 4pm |||| Evening: 6pm | 9pm ||||
+
+        # Starting dates for our trains. For North and South
+        date_list = ['2017-06-01 06:00:00', '2017-06-01 08:00:00', '2017-06-01 10:00:00', '2017-06-01 12:00:00',
+                     '2017-06-01 14:00:00', '2017-06-01 16:00:00', '2017-06-01 18:00:00', '2017-06-01 21:00:00']
+
+        datetime_object_list = map(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'), date_list)
+
+        return datetime_object_list
+
     def calculateTime_IN_OUT(self, starting_date, time_in_deltas, time_out_deltas):
-        # *Initial value for time_in for any train*
         # starting_date => 2017-06-01 06:00:00
         starting_time = starting_date.time()  # 06:00:00
         final_time_in_values = [starting_date]  # list contains starting date
@@ -117,17 +131,6 @@ class Command(BaseCommand):
             starting_date2 = temp_time2
             starting_time2 = starting_date2.time()
 
-
-    def generateDates(self):
-        # Morning: 6am | 8am | 10am |||| Afternoon: 12pm | 2pm | 4pm |||| Evening: 6pm | 8pm ||||
-        deltas = []
-
-        date_list = []
-
-        datetime(2017, 6, 1, 06, 00)
-
-        return date_list
-
     # =======================================
     # =========== HANDLE FUNCTION ===========
     # =======================================
@@ -136,7 +139,7 @@ class Command(BaseCommand):
         # self._populate_station() ALREADY POPULATED NO NEED TO RUN AGAIN
         # self._populate_trains() ALREADY POPULATED NO NEED TO RUN AGAIN
         self._populate_stopsat()
-
+        # self._populate_segement()
 
 
 

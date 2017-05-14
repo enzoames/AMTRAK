@@ -67,38 +67,55 @@ class Command(BaseCommand):
     def _populate_stopsat(self):
         # If train arrives at station A at 6am and leaves at 6:10 -> time delta is 10
         # Same for time_out deltas
-        time_in_deltas = [10, 12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 86, 23, 28, 24, 53, 21, 14, 12, 17, 39, 39, 19, 5]
-        time_out_deltas = [6, 12, 16, 23, 30, 24, 31, 25, 12, 6, 77, 27, 23, 28, 43, 34, 21, 14, 12, 17, 39, 39, 19,
-                           000]
+        # Time Deltas for North Bound Trains
+        north_time_in_deltas = [10, 12, 16, 23, 30, 20, 35, 25, 12, 6, 18, 86, 23, 28, 24, 53, 21, 14, 12, 17, 39, 39,
+                                19, 5]
+        north_time_out_deltas = [6, 12, 16, 23, 30, 24, 31, 25, 12, 6, 77, 27, 23, 28, 43, 34, 21, 14, 12, 17, 39, 39,
+                                 19, 000]
 
-        trains_list = Train.objects.all()
+        # Gets North Bound Trains
+        trains_list = Train.objects.filter(train_direction=1)
         station_list = Station.objects.all()
 
         starting_dates_list = self.generateDates()
-
         count = 0
         for train in trains_list:
+            i = 0
             # call helper function
-            self.calculateTime_IN_OUT(starting_dates_list[count], time_in_deltas, time_out_deltas)
+            final_time = self.calculateTime_IN_OUT(starting_dates_list[count], north_time_in_deltas, north_time_out_deltas)
             for station in station_list:
-                i = 0  # final_time_in_values has 1 more than final_time_out_values
-                StopsAt(sa_train=train, sa_station = station,
-                        sa_time_in=final_time_in_values[i], sa_time_out=final_time_out_values[i])
+                instance = StopsAt(sa_train=train, sa_station=station,
+                        sa_time_in=final_time[0][i], sa_time_out=final_time[1][i])
+                if final_time[1][i] < final_time[0][i]:  # We reached the last stop of train - no sa_time_out
+                    instance = StopsAt(sa_train=train, sa_station=station,
+                                       sa_time_in=final_time[0][i])
+                instance.save()
+                i += 1
 
             count += 1
 
+        # Time Deltas for South Bound Trains
+        south_time_in_deltas = [5, 19, 39, 39, 17, 12, 14, 21, 53, 24, 28, 23, 86, 18, 6, 12, 25, 35, 20, 30, 23, 16, 12, 10]
+        south_time_out_deltas = [19, 39, 39, 17, 12, 14, 21, 34, 43, 28, 23, 27, 77, 6, 12, 25, 31, 24, 30, 23, 16, 12, 6, 000]
 
-        # Another approach, might be useful for different scenario
-        # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
-        #
-        # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
-        #     print m.time
+        # Gets South Bound Trains
+        trains_list = Train.objects.filter(train_direction=0)
+        station_list = Station.objects.all()
+
+        for train in trains_list:
+            i = 0
+            final_time = self.calculateTime_IN_OUT(starting_dates_list[count], north_time_in_deltas, north_time_out_deltas)
+            for station in reversed(station_list):
+                station_instance = Station.Objects.get
+
+        # TODO: NOW THAT STATIONS CAN BE ITERATES BACKWARDS, WE CAN SAVE STOPSAT INSTANCE
 
     # ========================================
     # =========== HELPER FUNCTIONS ===========
     # ========================================
 
     def generateDates(self):
+        # Both Directions
         # Morning: 6am | 8am | 10am |||| Afternoon: 12pm | 2pm | 4pm |||| Evening: 6pm | 9pm ||||
 
         # Starting dates for our trains. For North and South
@@ -114,8 +131,7 @@ class Command(BaseCommand):
         starting_time = starting_date.time()  # 06:00:00
         final_time_in_values = [starting_date]  # list contains starting date
 
-        # *Initial value for time_out for any train*
-        # This gives 2017-06-01 06:05:00
+        # Calculating time_out
         starting_date2 = datetime.combine(starting_date, starting_time) + timedelta(minutes=5)
         starting_time2 = starting_date2.time()  # 06:05:00
         final_time_out_values = [starting_date2]
@@ -131,6 +147,9 @@ class Command(BaseCommand):
             starting_date2 = temp_time2
             starting_time2 = starting_date2.time()
 
+        final = [final_time_in_values, final_time_out_values]
+        return final
+
     # =======================================
     # =========== HANDLE FUNCTION ===========
     # =======================================
@@ -145,11 +164,23 @@ class Command(BaseCommand):
 
 
 
-            # time_in = ["06:00:00", "06:10:00", "06:22:00", "06:38:00", "07:01:00", "07:31:00", "07:51:00", "08:26:00",
-        #            "08:51:00", "09:03:00", "09:09:00", "09:27:00", "10:53:00", "11:16:00", "11:44:00", "12:08:00",
-        #            "13:01:00", "13:22:00", "13:36:00", "13:48:00", "14:05:00", "14:44:00", "15:23:00", "15:42:00",
-        #            "15:47:00"]
+
+
+
+
+# time_in = ["06:00:00", "06:10:00", "06:22:00", "06:38:00", "07:01:00", "07:31:00", "07:51:00", "08:26:00",
+#            "08:51:00", "09:03:00", "09:09:00", "09:27:00", "10:53:00", "11:16:00", "11:44:00", "12:08:00",
+#            "13:01:00", "13:22:00", "13:36:00", "13:48:00", "14:05:00", "14:44:00", "15:23:00", "15:42:00",
+#            "15:47:00"]
+#
+# time_out = ["06:05:00", "06:11:00", "06:23:00", "06:39:00", "07:02:00", "07:32:00", "07:56:00", "08:27:00",
+#             "08:52:00", "09:04:00", "09:10:00", "10:27:00", "10:54:00", "11:17:00", "11:45:00", "12:28:00",
+#             "13:02:00", "13:23:00", "13:37:00", "13:49:00", "14:06:00", "14:45:00", "15:24:00", "15:43:00"]
+
+
+
+        # Another approach, might be useful for different scenario
+        # minutes = lambda s, e: (s + datetime.timedelta(minutes=x) for x in xrange((e - s).seconds / 60 + 1))
         #
-        # time_out = ["06:05:00", "06:11:00", "06:23:00", "06:39:00", "07:02:00", "07:32:00", "07:56:00", "08:27:00",
-        #             "08:52:00", "09:04:00", "09:10:00", "10:27:00", "10:54:00", "11:17:00", "11:45:00", "12:28:00",
-        #             "13:02:00", "13:23:00", "13:37:00", "13:49:00", "14:06:00", "14:45:00", "15:24:00", "15:43:00"]
+        # for m in minutes(today, today + datetime.timedelta(minutes=time_in_deltas[i])):
+        #     print m.time

@@ -14,9 +14,9 @@ from django.shortcuts import render
 from .forms import PassengerForm, SearchTrainForm
 from .models import Segment, Station, SeatsFree, StopsAt
 
-# ============================================
-# ========== REQUEST CALL FUNCTIONS ==========
-# ============================================
+# ===========================================
+# ========== REQUEST CALL FUNCTION ==========
+# ===========================================
 
 
 def search(request):

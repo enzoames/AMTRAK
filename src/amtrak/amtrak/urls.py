@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^search/', include('amtrakmain.urls')),  # including the urls belonging to amtrak app
     url(r'^purchase/', include('purchase.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^displaytables', include('displaydata.urls')),
     #url(r'^search/', include('amtrakmain.urls'))
     # Another way of writing the url pattern for a view
     # url(r'SomeName^$', <app_name>.views.function_name>)

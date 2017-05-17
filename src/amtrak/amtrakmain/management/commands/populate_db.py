@@ -278,6 +278,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # self._populate_station() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
         # self._populate_trains() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
-        self._populate_stopsat()
-        #self._populate_segement()
-        #self._populate_seatsfree()
+        # self._populate_stopsat() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
+        # self._populate_segement() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
+        # self._populate_seatsfree()
+        print "NO NEED TO POPULATE DATABASE"

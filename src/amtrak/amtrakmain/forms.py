@@ -9,7 +9,6 @@ Validating data:
 from django import forms
 from .models import *
 
-
 # This class will generate a search form if there is an available train and if it has empty seats based on the the
 # user input of start_station, end_station, and time.
 class SearchTrainForm(forms.Form):

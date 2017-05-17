@@ -1,0 +1,66 @@
+{% extends 'homepage/base.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+    <div class="container">
+    {% block content %}
+
+        <h2>* App description, Instructions and Notes to consider *</h2>
+            <ul>
+                <li>The purpose of this web application is to recreate the Amtrak ticket booking system</li>
+                <li>All ticket bookings <b>start</b>: 2017-06-01 6:00:00</li>
+                <li>This platform serves trains for <b>only</b> the month on June</li>
+                <li>First Trains</li>
+                <ul>
+                    <li>Train "1North", "Union Station | Washington, DC" departs 2017-06-01 6:00:00</li>
+                    <li>Train "1South", "South Station | Boston, MA" departs 2017-06-01 6:00:00</li>
+                </ul>
+                <li>Last Trains</li>
+                <ul>
+                    <li>Train "8North", "Union Station | Washington, DC" departs 2017-06-30 21:00:00</li>
+                    <li>Train "8South", "South Station | Boston, MA" departs 2017-06-30 21:00:00</li>
+                </ul>
+
+
+            </ul>
+
+            <h4>Instructions</h4>
+            <ul>
+              <li>Search Available Train: Looks through our database and find if an available train exists with the given inputs</li>
+                <ul>
+                    <li>Upon clicking the search button, user is prompted with:</li>
+                    <ul>
+                        <li>Return Home</li>
+                        <li>Make Another Search</li>
+                        <li>Purchase Selected Search</li>
+                    </ul>
+                </ul>
+
+            <li>Purchase Ticket: </li>
+                <ul>
+                    <li>Upon clicking Purchase button, user is prompted with:</li>
+                    <ul>
+                        <li>Ticket information</li>
+                        <li>Train</li>
+                        <li>Departure Station</li>
+                        <li>Departure Time </li>
+                        <li>Arriving Station</li>
+                        <li>Arriving Time </li>
+                        <li>NOTE: Trip information is saved on database</li>
+                    </ul>
+                </ul>
+
+            </ul>
+
+    {% endblock content %}
+    </div>
+
+</body>
+</html>

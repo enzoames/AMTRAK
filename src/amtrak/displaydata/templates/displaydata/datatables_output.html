@@ -12,8 +12,13 @@
     <div class="container">
     {% block content %}
 
+        <h3>Train Schedule</h3>
 
-        <h3>{{ title }}</h3>
+        {% for obj in schedule %}
+
+        <p><b>Departing Station:</b>> {{ obj.sa_station }} <b>Train Number:</b> {{ obj.sa_train }} <b>Departure Date:</b> {{ obj.sa_time_in }} <b>Arriving Date:</b> {{ obj.sa_time_out }}<br><br>
+
+        {% endfor %}
 
     {% endblock content %}
     </div>

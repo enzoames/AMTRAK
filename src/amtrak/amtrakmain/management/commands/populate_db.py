@@ -161,6 +161,7 @@ class Command(BaseCommand):
         i = 0
 
         for train in train_list:
+            print "populating train: ", train
             temp_date = previous_day_out[i]
 
             instance_stack = []  # contains 30 objects at a time
@@ -194,6 +195,7 @@ class Command(BaseCommand):
         i = 0
 
         for train in south_train_list:
+            print "populating train: ", train
             temp_date = previous_day_out[i]
 
             instance_stack = []  # contains 30 objects at a time
@@ -280,5 +282,5 @@ class Command(BaseCommand):
         # self._populate_trains() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
         # self._populate_stopsat() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
         # self._populate_segement() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
-        # self._populate_seatsfree()
+        # self._populate_seatsfree() ALREADY POPULATED NO NEED TO RUN AGAIN mysql
         print "NO NEED TO POPULATE DATABASE"

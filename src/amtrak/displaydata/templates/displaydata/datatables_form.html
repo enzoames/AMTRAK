@@ -9,13 +9,22 @@
 </head>
 <body>
 
-    <div class="container">
-    {% block content %}
+<div class="container">
+{% block content %}
 
-        <h3>{{ title }}</h3>
+{% load staticfiles %}
 
-    {% endblock content %}
-    </div>
+
+        <form method="POST" action = "">{% csrf_token %}
+
+            {{ form }} <br><br>
+
+            <input type="submit" value="Look up"/>
+
+        </form>
+
+{% endblock content %}
+</div>
 
 
 </body>

@@ -13,6 +13,7 @@ This is also where we will render (present to user) our forms created in forms.p
 from django.shortcuts import render
 from .forms import PassengerForm, SearchTrainForm
 from .models import Segment, Station, SeatsFree, StopsAt
+from datetime import date, datetime, time, timedelta
 
 # ===========================================
 # ========== REQUEST CALL FUNCTION ==========
@@ -90,17 +91,32 @@ def searchAvailableTrain(request_POST):
         # This is the segment where the passenger's trip ends
         tripSegmentEnd = Segment.objects.get(seg_north_end=tempChoiceEndStation)
 
-
-        # Check whether there's a free seat along the path of the trip
+        path_train = startingPoint.sf_train  # NEW CODE
+        tmp_station = tempChoiceStartStation  # NEW CODE
+        trip_date = datetime.strptime(tempChoiceDate, '%Y-%m-%d %H:%M:%S')
+        print "TRIP DATE START: ", trip_date
+        # Check whether there's a free seat along the path of the trip (Along Free Seats Table)
         while cursorPoint.sf_segment.id != tripSegmentEnd.id:
             tempSegment = Segment.objects.get(seg_south_end=cursorPoint.sf_segment.seg_north_end)
-            row = SeatsFree.objects.get(sf_segment=tempSegment)
+            print "SEGMENTS ALONG THE PATH: ", tempSegment
+
+            tmp_stop = StopsAt.objects.get(sa_train=path_train, sa_station=tempSegment.seg_south_end)  # NEW CODE
+            print "STOPSAT INSTANCE to get time_in of that train at that stop:", tmp_stop
+
+            trip_date = datetime.combine(trip_date.date(), tmp_stop.sa_time_in)
+            print "SEGMENT:", tempSegment, "LOOK UP TRIP DATE IN SEATSFREE: ", trip_date
+
+            row = SeatsFree.objects.get(sf_segment=tempSegment, sf_date=trip_date)  # NEW CODE
+
 
             if row.sf_count == 0:
                 context['title'] = "Train Booked from this destination please choose a different time"
                 return context
 
             cursorPoint = row
+            tmp_station = cursorPoint.sf_segment.seg_north_end
+            trip_date = cursorPoint.sf_date
+            print "NEW DATE: ", trip_date
 
         arrive_time = StopsAt.objects.get(sa_train=startingPoint.sf_train, sa_station=tempChoiceEndStation)
 

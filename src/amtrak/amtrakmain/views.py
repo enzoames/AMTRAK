@@ -65,7 +65,6 @@ def searchAvailableTrain(request_POST):
     # Every other case
     if tempChoiceStartStation.id < tempChoiceEndStation.id:  # Trip Heading North
 
-
         # This is the segment where the passenger's trip starts
         tripSegmentStart = Segment.objects.get(seg_south_end=tempChoiceStartStation)
         tempChoiceDate = request_POST['date']  # Selected date

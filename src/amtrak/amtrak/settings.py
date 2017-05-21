@@ -162,6 +162,8 @@ USE_L10N = True
 
 USE_TZ = False
 
+ATOMIC_REQUESTS = True
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

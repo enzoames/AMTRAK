@@ -14,11 +14,35 @@
 
         <h3>Train Schedule</h3>
 
-        {% for obj in schedule %}
+        {% for obj in output %}
 
         <p><b>Departing Station:</b>> {{ obj.sa_station }} <b>Train Number:</b> {{ obj.sa_train }} <b>Departure Date:</b> {{ obj.sa_time_in }} <b>Arriving Date:</b> {{ obj.sa_time_out }}<br><br>
 
         {% endfor %}
+
+
+        <form
+        <div class="pagination">
+
+            <span class="step-links">
+                {% if output.has_previous %}
+                <a href="?page={{ output.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                Page {{ output.number }} of {{ output.paginator.num_pages }}.
+                </span>
+
+                {% if output.has_next %}
+                <a href="?page={{ output.next_page_number }}"> Next Page </a>
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+
 
     {% endblock content %}
     </div>

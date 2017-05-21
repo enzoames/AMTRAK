@@ -17,11 +17,46 @@
 
         <form method="POST" action = "">{% csrf_token %}
 
-            {{ form }} <br><br>
+            <br><br>{{ form }}<br><br>
 
-            <input type="submit" value="Look up"/>
+            <input type="submit" value="Search"/><br><br>
+
+            <!--<input type="submit" name="q" value="Click1"> Search Train Schedule<br><br>-->
+            <!--<input type="submit" name="q" value="Click2"> Search Ticket Trips<br><br>-->
+            <!--<input type="submit" name="q" value="Click3"> Search Seats Free<br><br>-->
 
         </form>
+
+
+        <!--<div class="container">-->
+
+        <!--{% for obj in output %}-->
+
+        <!--<p><b>Departing Station:</b>> {{ obj.sa_station }} <b>Train Number:</b> {{ obj.sa_train }} <b>Departure Date:</b> {{ obj.sa_time_in }} <b>Arriving Date:</b> {{ obj.sa_time_out }}<br><br>-->
+        <!--</p>-->
+        <!--{% endfor %}-->
+
+        <!--</div>-->
+
+        <!--<div class="pagination">-->
+
+            <!--<span class="step-links">-->
+                <!--{% if output.has_previous %}-->
+                <!--<a href="?page={{ output.previous_page_number }}">previous</a>-->
+                <!--{% endif %}-->
+
+                <!--<span class="current">-->
+                <!--Page {{ output.number }} of {{ output.paginator.num_pages }}.-->
+                <!--</span>-->
+
+                <!--{% if output.has_next %}-->
+                <!--<a href="?page={{ output.next_page_number }}"> Next Page </a>-->
+                <!--{% endif %}-->
+
+            <!--</span>-->
+
+        <!--</div>-->
+
 
 {% endblock content %}
 </div>

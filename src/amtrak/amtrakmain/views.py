@@ -57,63 +57,66 @@ def searchAvailableTrain(request_POST):
     tempChoiceStartStation = Station.objects.get(id=request_POST['start'])  # Specific start station object
     tempChoiceEndStation = Station.objects.get(id=request_POST['end'])  # Specific end station object
 
-    # BASE CASE 1 - Same choice for both
+    # BASE CASE 1 ======= Same choice for both
     if tempChoiceStartStation == tempChoiceEndStation:
         context['title'] = "Please choose a different starting or ending station, Thank you"
         return context
 
-    # Every other case
+    #  ======= EVERY OTHER CASE =======
     if tempChoiceStartStation.id < tempChoiceEndStation.id:  # Trip Heading North
 
         # This is the segment where the passenger's trip starts
         tripSegmentStart = Segment.objects.get(seg_south_end=tempChoiceStartStation)
         tempChoiceDate = request_POST['date']  # Selected date
         # We search in SeatsFree table whether there are any rows that have the given segment and date
-        seatsFreeObject = SeatsFree.objects.filter(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
+        seatsFreeObject = SeatsFree.objects.get(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
 
-        # BASE CASE 2 - If didn't find a row with given time, throw a message
-        if len(seatsFreeObject) == 0:
+        # ======= BASE CASE A ======= If didn't find a row with given time, throw a message
+        if not seatsFreeObject:
             context['title'] = "There are no available trains at this given time. Please choose different time"
             return context
 
         # startingPoint has attribute segment(has attribute north & south), train, date, and count of open seats
-        startingPoint = seatsFreeObject[0]
+        startingPoint = seatsFreeObject
         cursorPoint = startingPoint
 
-        # BASE CASE 3 - No empty seats
+        # ======= BASE CASE B ======= No empty seats
         if startingPoint.sf_count == 0:
             message = "Every Ticket is booked at" + str(tempChoiceStartStation) + "at this time" + str(
                 cursorPoint.sf_date)
             context['title'] = message
             return context
 
+        # ======= EVERY OTHER CASE =======
         # This is the segment where the passenger's trip ends
         tripSegmentEnd = Segment.objects.get(seg_north_end=tempChoiceEndStation)
 
         path_train = startingPoint.sf_train  # NEW CODE
-        tmp_station = tempChoiceStartStation  # NEW CODE
         trip_date = datetime.strptime(tempChoiceDate, '%Y-%m-%d %H:%M:%S')
+
+        all_seats_free = SeatsFree.objects.all()  # get all of the entries so that its cached
+        all_stops_at = StopsAt.objects.all()
+
         print "TRIP DATE START: ", trip_date
         # Check whether there's a free seat along the path of the trip (Along Free Seats Table)
         while cursorPoint.sf_segment.id != tripSegmentEnd.id:
             tempSegment = Segment.objects.get(seg_south_end=cursorPoint.sf_segment.seg_north_end)
             print "SEGMENTS ALONG THE PATH: ", tempSegment
 
-            tmp_stop = StopsAt.objects.get(sa_train=path_train, sa_station=tempSegment.seg_south_end)  # NEW CODE
+            tmp_stop = all_stops_at.get(sa_train=path_train, sa_station=tempSegment.seg_south_end)  # NEW CODE
             print "STOPSAT INSTANCE to get time_in of that train at that stop:", tmp_stop
 
             trip_date = datetime.combine(trip_date.date(), tmp_stop.sa_time_in)
             print "SEGMENT:", tempSegment, "LOOK UP TRIP DATE IN SEATSFREE: ", trip_date
 
-            row = SeatsFree.objects.get(sf_segment=tempSegment, sf_date=trip_date)  # NEW CODE
-
+            row = all_seats_free.get(sf_segment=tempSegment, sf_train=path_train, sf_date=trip_date)  # NEW CODE
 
             if row.sf_count == 0:
                 context['title'] = "Train Booked from this destination please choose a different time"
                 return context
 
             cursorPoint = row
-            tmp_station = cursorPoint.sf_segment.seg_north_end
+            # tmp_station = cursorPoint.sf_segment.seg_north_end
             trip_date = cursorPoint.sf_date
             print "NEW DATE: ", trip_date
 
@@ -137,36 +140,51 @@ def searchAvailableTrain(request_POST):
         tripSegmentStart = Segment.objects.get(seg_north_end=tempChoiceStartStation)
         tempChoiceDate = request_POST['date']  # Selected date
         # We search in SeatsFree table whether there are any rows that have the given segment and date
-        seatsFreeObject = SeatsFree.objects.filter(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
+        seatsFreeObject = SeatsFree.objects.get(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
 
-        # BASE CASE 2 - If didn't find a row with given time, throw a message
-        if len(seatsFreeObject) == 0:
+        # ======= BASE CASE A ======= If didn't find a row with given time, throw a message
+        if not seatsFreeObject:
             context['title'] = "There are no available trains at this given time. Please choose different time"
             return context
 
         # startingPoint has attribute segment(has attribute north & south), train, date, and count of open seats
-        startingPoint = seatsFreeObject[0]
+        startingPoint = seatsFreeObject
         cursorPoint = startingPoint
 
-        # BASE CASE 3 - No empty seats
+        # ======= BASE CASE B ======= No empty seats
         if startingPoint.sf_count == 0:
-            message = "Every Ticket is booked at" + str(tempChoiceStartStation) + "at this time" + str(
-                cursorPoint.sf_date)
+            message = "Every Ticket is booked at" + str(tempChoiceStartStation) + "at this time" + str(cursorPoint.sf_date)
             context['title'] = message
             return context
 
+        # ======= EVERY OTHER CASE =======
         # This is the segment where the passenger's trip ends
         tripSegmentEnd = Segment.objects.get(seg_south_end=tempChoiceEndStation)
 
+        path_train = startingPoint.sf_train  # NEW CODE
+        trip_date = datetime.strptime(tempChoiceDate, '%Y-%m-%d %H:%M:%S')
+
+        all_seats_free = SeatsFree.objects.all()  # get all of the entries so that its cached
+        all_stops_at = StopsAt.objects.all()
+
         while cursorPoint.sf_segment.id != tripSegmentEnd.id:
             tempSegment = Segment.objects.get(seg_north_end=cursorPoint.sf_segment.seg_south_end)
-            row = SeatsFree.objects.get(sf_segment=tempSegment)
+
+            tmp_stop = all_stops_at.get(sa_train=path_train, sa_station=tempSegment.seg_north_end)  # NEW CODE
+
+            trip_date = datetime.combine(trip_date.date(), tmp_stop.sa_time_in)
+            print "SEGMENT:", tempSegment, "LOOK UP TRIP DATE IN SEATSFREE: ", trip_date
+
+            row = all_seats_free.get(sf_segment=tempSegment, sf_train=path_train, sf_date=trip_date)  # NEW CODE
 
             if row.sf_count == 0:
                 context['title'] = "Train Booked from this destination please choose a different time"
                 return context
 
             cursorPoint = row
+            # tmp_station = cursorPoint.sf_segment.seg_north_end
+            trip_date = cursorPoint.sf_date
+            print "NEW DATE: ", trip_date
 
         arrive_time = StopsAt.objects.get(sa_train=startingPoint.sf_train, sa_station=tempChoiceEndStation)
 

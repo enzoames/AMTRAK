@@ -12,12 +12,12 @@
     <div class="container">
     {% block content %}
 
-        <h3>Train Schedule</h3>
+        <h3>Seats Free</h3>
 
-        {% for obj in output %}
+        {% for obj in output2 %}
 
-        <p><b>Departing Station:</b> {{ obj.sa_station }} <b>Train Number:</b> {{ obj.sa_train }}
-            <b>Departure Date:</b> {{ obj.sa_time_in }} <b>Arriving Date:</b> {{ obj.sa_time_out }}</p><br><br>
+        <p><b>Seats Free Count</b>> {{ obj.sf_count }} <b>Train Number:</b> {{ obj.sf_train }}
+            <b>Segment:</b> {{ obj.sf_segment }}</p><br><br>
 
         {% endfor %}
 
@@ -26,7 +26,7 @@
 
             <span class="step-links">
                 {% if output.has_previous %}
-                <a href="?page={{ output.previous_page_number }}">previous</a>
+                <a href="?seatpage={{ output.previous_page_number }}">previous</a>
                 {% endif %}
 
                 <span class="current">
@@ -34,7 +34,7 @@
                 </span>
 
                 {% if output.has_next %}
-                <a href="?page={{ output.next_page_number }}"> Next Page </a>
+                <a href="?seatpage={{ output.next_page_number }}"> Next Page </a>
                 {% endif %}
 
             </span>
@@ -49,4 +49,3 @@
 
 </body>
 </html>
-

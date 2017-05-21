@@ -156,20 +156,6 @@ class TicketTrip(models.Model):
     #     return [(field.verbose_name, self.get_field_value(field)) for field in type(self)._meta.fields]
 
 
-# # FARE ??? Do we need a table for fares ? not sure
-# # get a reasonable fair between boston and washington and spread out the fares btw the segments
-#
-# #   fare_id   |   seg_start     | price |
-# # ------------|-----------------|-------|
-# # int auto pk |  segment_id FK  | int   |
-#
-#
-# class Fare(models.Model):
-#     fare_
-
-
-
-
 # ==== STOPS_AT ====
 #
 #   train_num    | station_id      | time_in    | time_out  |

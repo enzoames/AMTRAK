@@ -69,7 +69,7 @@ def searchAvailableTrain(request_POST):
         tripSegmentStart = Segment.objects.get(seg_south_end=tempChoiceStartStation)
         tempChoiceDate = request_POST['date']  # Selected date
         # We search in SeatsFree table whether there are any rows that have the given segment and date
-        seatsFreeObject = SeatsFree.objects.get(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
+        seatsFreeObject = SeatsFree.objects.filter(sf_segment=tripSegmentStart, sf_date=tempChoiceDate)
 
         # ======= BASE CASE A ======= If didn't find a row with given time, throw a message
         if not seatsFreeObject:
@@ -77,7 +77,7 @@ def searchAvailableTrain(request_POST):
             return context
 
         # startingPoint has attribute segment(has attribute north & south), train, date, and count of open seats
-        startingPoint = seatsFreeObject
+        startingPoint = seatsFreeObject[0]
         cursorPoint = startingPoint
 
         # ======= BASE CASE B ======= No empty seats

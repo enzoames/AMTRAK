@@ -1,0 +1,53 @@
+<{% extends 'homepage/base.html' %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Tables Output</title>
+</head>
+<body>
+
+    <div class="container">
+    {% block content %}
+
+        <h3>Tickets</h3>
+
+        {% for obj in output3 %}
+        <p><b>Ticket id: </b>{{ obj.id }}</p><br>
+        <p><b>Trip Start Station</b>> {{ obj.trip_start_station }} <b>Train Number:</b> {{ obj.trip_train }}
+            <b>Departure Date:</b> {{ obj.trip_date }} <b>Trip End Station:</b> {{ obj.trip_end_station}}
+            <b>Segment Start:</b> {{ obj.trip_segment_start }} <b>Segment End:</b> {{ obj.trip_segment_end }}
+            <b>Payment</b> {{ obj.trip_pay_method }} <b>Fare:</b> {{ obj.trip_fare}}</p><br><br>
+
+        {% endfor %}
+
+
+        <div class="pagination">
+
+            <span class="step-links">
+                {% if output.has_previous %}
+                <a href="?ticketpage={{ output.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                Page {{ output.number }} of {{ output.paginator.num_pages }}.
+                </span>
+
+                {% if output.has_next %}
+                <a href="?ticketpage={{ output.next_page_number }}"> Next Page </a>
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+
+    {% endblock content %}
+    </div>
+
+
+</body>
+</html>
